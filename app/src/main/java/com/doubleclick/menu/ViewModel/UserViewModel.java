@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Repository.UserRepository;
-import com.doubleclick.menu.user;
+import com.doubleclick.menu.Interface.UserInterface;
 
 /**
  * Created By Eslam Ghazy on 9/21/2022
  */
-public class UserViewModel extends ViewModel implements user {
+public class UserViewModel extends ViewModel implements UserInterface {
 
 
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
