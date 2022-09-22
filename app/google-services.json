@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "996949732005",
+    "project_id": "menuapp-a9ad6",
+    "storage_bucket": "menuapp-a9ad6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996949732005:android:4b20103cc865b25649fb4c",
+        "android_client_info": {
+          "package_name": "com.doubleclick.menu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996949732005-cca9rdi4ru42gs6du59fd1nbvdtsoh39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD59N8dlUGxnen7VvA0HK8s6M5cb9GClk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996949732005-cca9rdi4ru42gs6du59fd1nbvdtsoh39.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

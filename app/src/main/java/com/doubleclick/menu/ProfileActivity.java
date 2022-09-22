@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,22 +38,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int IMAGE_REQUEST = 100;
-    private ImageView back, done;
+    private ImageView back, edit;
     private CircleImageView app_bar_image;
-    private EditText username_et;
-    private TextView email_txt;
+    private TextView username_tv;
+    private TextView email_tv;
     private Uri uri;
     private UserViewModel userViewModel;
+    private LinearLayout add_menu_item, add_new_dish, add_person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         back = findViewById(R.id.back);
-        done = findViewById(R.id.done);
         app_bar_image = findViewById(R.id.app_bar_image);
-        username_et = findViewById(R.id.username_et);
-        email_txt = findViewById(R.id.email_et);
+        username_tv = findViewById(R.id.username_tv);
+        email_tv = findViewById(R.id.email_tv);
+        edit = findViewById(R.id.edit);
+        add_menu_item = findViewById(R.id.add_menu_item);
+        add_new_dish = findViewById(R.id.add_new_dish);
+        add_person = findViewById(R.id.add_person);
 
 
         back.setOnClickListener(view -> {
@@ -60,9 +65,13 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
         });
 
-        done.setOnClickListener(view -> {
-            update();
+        edit.setOnClickListener(view -> {
+
         });
+        add_person.setOnClickListener(view -> {
+            startActivity(new Intent());
+        });
+
 
         app_bar_image.setOnClickListener(view -> {
             openImage();
@@ -73,8 +82,8 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                username_et.setText(user.getName());
-                email_txt.setText(user.getEmail());
+                username_tv.setText(user.getName());
+                email_tv.setText(user.getEmail());
                 Glide.with(ProfileActivity.this).load(user.getImage()).into(app_bar_image);
             }
         });
@@ -91,12 +100,13 @@ public class ProfileActivity extends AppCompatActivity {
     private void update() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", Repo.uid);
-        map.put("name", username_et.getText().toString());
+        if (!username_tv.getText().toString().equals("")) {
+            map.put("name", username_tv.getText().toString());
+        }
         Repo.refe.child("User").child(Repo.uid).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    uploadImage();
                     startActivity(new Intent(ProfileActivity.this, MenuActivity.class));
                     finish();
                 }
@@ -111,25 +121,20 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void uploadImage() {
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Uploading");
-        pd.show();
         if (uri != null) {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setMessage("Uploading");
+            pd.show();
             final StorageReference fileReference = FirebaseStorage.getInstance()
                     .getReference("Images").child(System.currentTimeMillis() + "." + getFileExtension(uri));
-            fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
-                    url.addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("image", task.getResult().toString());
-                            Repo.refe.child("User").child(Repo.uid).updateChildren(map);
-                        }
-                    });
-                }
+            fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
+                url.addOnCompleteListener(task -> {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("image", task.getResult().toString());
+                    Repo.refe.child("User").child(Repo.uid).updateChildren(map);
+                    pd.dismiss();
+                });
             });
         }
     }
@@ -137,8 +142,10 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        assert data != null;
-        uri = data.getData();
-        app_bar_image.setImageURI(uri);
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            uri = data.getData();
+            app_bar_image.setImageURI(uri);
+            uploadImage();
+        }
     }
 }

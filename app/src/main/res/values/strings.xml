@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Menu</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">name</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="euro">€</string>
+    <string name="price">12.99</string>
+    <string name="profile_details">Profile Details</string>
+    <string name="user_name">User name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="input_email">Input email</string>
+    <string name="input_password">Input password</string>
+    <string name="ingrendiets">Ingrendiets</string>
+    <string name="details">Details</string>
+    <string name="add_menu_item">Add Menu Item</string>
+    <string name="add_new_dish">Add New Dish</string>
+    <string name="add_new_person">Add New Person</string>
+</resources>

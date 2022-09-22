@@ -7,12 +7,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.doubleclick.menu.Adapter.FoodAdapter;
+import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,11 +28,11 @@ public class PageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
+    private static final String ARG_PARAM2 = "array";
+    private static final String TAG = "PageFragment";
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
+    private ArrayList<Food> mParam2;
 
     private RecyclerView foods;
 
@@ -59,7 +63,7 @@ public class PageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = getArguments().getParcelableArrayList(ARG_PARAM2);
         }
     }
 
@@ -74,5 +78,8 @@ public class PageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         foods = view.findViewById(R.id.foods);
         foods.setAdapter(new FoodAdapter());
+        Log.e(TAG, "onViewCreated: " + mParam1);
+        Log.e(TAG, "onViewCreated: " + mParam2);
+
     }
 }
