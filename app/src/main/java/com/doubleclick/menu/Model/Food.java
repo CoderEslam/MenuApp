@@ -16,10 +16,6 @@ public class Food implements Parcelable {
     public Food() {
     }
 
-    public Food(String name) {
-        this.name = name;
-    }
-
     protected Food(Parcel in) {
         name = in.readString();
         image = in.readString();

@@ -1,5 +1,8 @@
 package com.doubleclick.menu;
 
+import static com.doubleclick.menu.Model.Constant.IMAGES;
+import static com.doubleclick.menu.Model.Constant.USER;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.doubleclick.menu.Fragment.EditFragment;
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.UserViewModel;
@@ -66,10 +70,19 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         edit.setOnClickListener(view -> {
-
+            EditFragment editFragment = new EditFragment();
+            editFragment.show(getSupportFragmentManager(), "Edit");
         });
         add_person.setOnClickListener(view -> {
-            startActivity(new Intent());
+            startActivity(new Intent(this, AddPersonActivity.class));
+        });
+
+        add_new_dish.setOnClickListener(view -> {
+            startActivity(new Intent(this, AddNewDishActivity.class));
+        });
+
+        add_menu_item.setOnClickListener(view -> {
+            startActivity(new Intent(this, AddNewMenuItemActivity.class));
         });
 
 
@@ -97,23 +110,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void update() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", Repo.uid);
-        if (!username_tv.getText().toString().equals("")) {
-            map.put("name", username_tv.getText().toString());
-        }
-        Repo.refe.child("User").child(Repo.uid).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    startActivity(new Intent(ProfileActivity.this, MenuActivity.class));
-                    finish();
-                }
-            }
-        });
-    }
-
     public String getFileExtension(Uri uri) {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -126,13 +122,13 @@ public class ProfileActivity extends AppCompatActivity {
             pd.setMessage("Uploading");
             pd.show();
             final StorageReference fileReference = FirebaseStorage.getInstance()
-                    .getReference("Images").child(System.currentTimeMillis() + "." + getFileExtension(uri));
+                    .getReference(IMAGES).child(Repo.uid + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 url.addOnCompleteListener(task -> {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("image", task.getResult().toString());
-                    Repo.refe.child("User").child(Repo.uid).updateChildren(map);
+                    Repo.refe.child(USER).child(Repo.uid).updateChildren(map);
                     pd.dismiss();
                 });
             });

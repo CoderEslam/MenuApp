@@ -19,4 +19,8 @@
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_new_dish">Add New Dish</string>
     <string name="add_new_person">Add New Person</string>
+    <string name="upload">Upload</string>
+    <string name="deleted">Deleted</string>
+    <string name="edit">Edit</string>
+    <string name="update">Update</string>
 </resources>
