@@ -1,5 +1,10 @@
 package com.doubleclick.menu.Fragment;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,16 +12,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.doubleclick.menu.Adapter.FoodAdapter;
 import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.R;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,14 +42,15 @@ public class PageFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_IMAGE = "image";
     private static final String ARG_PARAM2 = "array";
     private static final String TAG = "PageFragment";
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String mImage;
     private ArrayList<Food> mParam2;
 
     private RecyclerView foods;
+    private ImageView bg_image;
 
     public PageFragment() {
         // Required empty public constructor
@@ -52,7 +68,7 @@ public class PageFragment extends Fragment {
     public static PageFragment newInstance(String param1, String param2) {
         PageFragment fragment = new PageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_IMAGE, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +78,7 @@ public class PageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mImage = getArguments().getString(ARG_IMAGE);
             mParam2 = getArguments().getParcelableArrayList(ARG_PARAM2);
         }
     }
@@ -71,15 +87,83 @@ public class PageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_page, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         foods = view.findViewById(R.id.foods);
-        foods.setAdapter(new FoodAdapter());
-        Log.e(TAG, "onViewCreated: " + mParam1);
-        Log.e(TAG, "onViewCreated: " + mParam2);
+        bg_image = view.findViewById(R.id.bg_image);
+        Glide.with(requireContext()).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25));
+            }
 
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+        //second parametre is radius
+
+        foods.setAdapter(new FoodAdapter());
+//        Blurry.with(requireContext()).capture(view).into(bg_image);
+        /*Blurry.with(requireContext())
+                .radius(25)
+                .sampling(1)
+                .async()
+                .capture(bg_image)
+                .into(bg_image);*/
+        Log.e(TAG, "onViewCreated: " + mImage);
+        Log.e(TAG, "onViewCreated: " + mParam2);
+//        Blurry.with(requireContext()).capture(view).into(bg_image);
     }
+
+
+    @SuppressLint("NewApi")
+    public Bitmap blurRenderScript(Context context, Bitmap smallBitmap, int radius) {
+        try {
+            smallBitmap = RGB565toARGB888(smallBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(
+                smallBitmap.getWidth(), smallBitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        RenderScript renderScript = RenderScript.create(requireContext());
+
+        Allocation blurInput = Allocation.createFromBitmap(renderScript, smallBitmap);
+        Allocation blurOutput = Allocation.createFromBitmap(renderScript, bitmap);
+
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(renderScript,
+                Element.U8_4(renderScript));
+        blur.setInput(blurInput);
+        blur.setRadius(radius); // radius must be 0 < r <= 25
+        blur.forEach(blurOutput);
+
+        blurOutput.copyTo(bitmap);
+        renderScript.destroy();
+
+        return bitmap;
+    }
+
+    private static Bitmap RGB565toARGB888(Bitmap img) throws Exception {
+        int numPixels = img.getWidth() * img.getHeight();
+        int[] pixels = new int[numPixels];
+
+        //Get JPEG pixels.  Each int is the color values for one pixel.
+        img.getPixels(pixels, 0, img.getWidth(), 0, 0, img.getWidth(), img.getHeight());
+
+        //Create a Bitmap of the appropriate format.
+        Bitmap result = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
+
+        //Set RGB pixels.
+        result.setPixels(pixels, 0, result.getWidth(), 0, 0, result.getWidth(), result.getHeight());
+        return result;
+    }
+
 }

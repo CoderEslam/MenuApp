@@ -7,18 +7,26 @@
     android:background="@color/white"
     tools:context=".Fragment.PageFragment">
 
+    <ImageView
+        android:alpha=".3"
+        android:id="@+id/bg_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/img" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/foods"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="5dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_food"
-        app:spanCount="4"/>
+        app:spanCount="4"
+        tools:listitem="@layout/item_food" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

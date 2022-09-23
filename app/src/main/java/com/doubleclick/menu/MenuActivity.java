@@ -62,7 +62,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onChanged(ArrayList<MenuItem> menuItems) {
                 for (MenuItem item : menuItems) {
-                    creator.add(item.getName(), PageFragment.class);
+                    creator.add(item.getName(), PageFragment.class, new Bundler().putString("image", item.getImage()).get());
                 }
                 viewPager.setAdapter(adapter);
                 viewPagerTab.setViewPager(viewPager);
