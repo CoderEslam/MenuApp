@@ -8,7 +8,7 @@
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/drawable/bg_white.xml" value="0.1765" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/drawable/minimize.xml" value="0.1765" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/drawable/minus.xml" value="0.1765" />
-        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_new_dish.xml" value="0.131640625" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_new_dish.xml" value="0.14" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_new_menu_item.xml" value="0.14" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_person.xml" value="0.142578125" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_food.xml" value="0.12" />
@@ -17,11 +17,16 @@
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_profile.xml" value="0.10629067245119306" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_sign_in.xml" value="0.14" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_sign_up.xml" value="0.131640625" />
-        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/all_person_item.xml" value="0.142578125" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/all_person_item.xml" value="0.22" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/dish_item.xml" value="0.142578125" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/edit_fragmeny.xml" value="0.15" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/fragment_page.xml" value="0.14" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/ingrendiets_item.xml" value="0.142578125" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/item_food.xml" value="0.12" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/menu_item.xml" value="0.2" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/spinner_item.xml" value="0.12" />
+        <entry key="..\:/Users/eslam/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.142578125" />
+        <entry key="..\:/Users/eslam/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.142578125" />
       </map>
     </option>
   </component>

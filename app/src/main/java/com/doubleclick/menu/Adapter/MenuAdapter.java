@@ -34,7 +34,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UserViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.all_person_item, parent, false));
+        return new UserViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false));
     }
 
     @Override

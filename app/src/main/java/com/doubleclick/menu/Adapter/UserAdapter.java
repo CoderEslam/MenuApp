@@ -3,8 +3,12 @@ package com.doubleclick.menu.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,9 +45,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         holder.name.setText(users.get(position).getName());
         Glide.with(holder.itemView.getContext()).load(users.get(position).getImage()).into(holder.image);
-        holder.delete.setOnClickListener(view -> {
-            options.deleteUser(users.get(position));
+        String[] option = holder.itemView.getContext().getResources().getStringArray(R.array.user_option);
+        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
+        ArrayAdapter aa = new ArrayAdapter(holder.itemView.getContext(), android.R.layout.simple_spinner_item, option);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.spinner.setAdapter(aa);
 
     }
 
@@ -55,13 +71,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public class UserViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView image;
         private TextView name;
-        private ImageView delete;
+        private Spinner spinner;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
-            delete = itemView.findViewById(R.id.delete);
+            spinner = itemView.findViewById(R.id.spinner);
         }
     }
 }

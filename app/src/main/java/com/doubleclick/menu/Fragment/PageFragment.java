@@ -98,7 +98,7 @@ public class PageFragment extends Fragment {
         Glide.with(requireContext()).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25));
+                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25/*radius must be 0 < r <= 25*/));
             }
 
             @Override
@@ -109,16 +109,8 @@ public class PageFragment extends Fragment {
         //second parametre is radius
 
         foods.setAdapter(new FoodAdapter());
-//        Blurry.with(requireContext()).capture(view).into(bg_image);
-        /*Blurry.with(requireContext())
-                .radius(25)
-                .sampling(1)
-                .async()
-                .capture(bg_image)
-                .into(bg_image);*/
         Log.e(TAG, "onViewCreated: " + mImage);
         Log.e(TAG, "onViewCreated: " + mParam2);
-//        Blurry.with(requireContext()).capture(view).into(bg_image);
     }
 
 

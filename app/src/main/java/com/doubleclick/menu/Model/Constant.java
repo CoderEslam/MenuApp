@@ -6,5 +6,6 @@ package com.doubleclick.menu.Model;
 public class Constant {
     public static final String USER = "User";
     public static final String MENU = "Menu";
+    public static final String FOOD = "Food";
     public static final String IMAGES = "Images";
 }

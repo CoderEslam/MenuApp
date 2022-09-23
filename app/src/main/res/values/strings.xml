@@ -14,7 +14,7 @@
     <string name="login">Login</string>
     <string name="input_email">Input email</string>
     <string name="input_password">Input password</string>
-    <string name="ingrendiets">Ingrendiets</string>
+    <string name="ingrendiets">Ingredients</string>
     <string name="details">Details</string>
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_new_dish">Add New Dish</string>
@@ -23,4 +23,13 @@
     <string name="deleted">Deleted</string>
     <string name="edit">Edit</string>
     <string name="update">Update</string>
+    <string name="user_role">User Role</string>
+    <string name="waiter">Waiter</string>
+    <string name="food">Food</string>
+    <string name="_price_">price</string>
+    <string-array name="user_option">
+        <item>Manger</item>
+        <item>Waiter</item>
+        <item>Disable</item>
+    </string-array>
 </resources>
