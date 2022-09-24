@@ -9,4 +9,6 @@ import com.doubleclick.menu.Model.User;
 public interface MenuOptions {
     void deleteMenu(MenuItem menuItem);
 
+    void UpdateMenu(MenuItem menuItem);
+
 }

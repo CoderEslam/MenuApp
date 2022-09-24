@@ -44,11 +44,11 @@ public class FoodViewModel extends ViewModel implements FoodInterface {
     }
 
     public LiveData<Food> FoodItemUpdate() {
-        return foodItemDelete;
+        return foodItemUpdate;
     }
 
     public LiveData<Food> FoodItemDelete() {
-        return foodItemUpdate;
+        return foodItemDelete;
     }
 
 

@@ -44,6 +44,13 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder
         holder.delete.setOnClickListener(view -> {
             menuOptions.deleteMenu(menuItems.get(position));
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                menuOptions.UpdateMenu(menuItems.get(holder.getAdapterPosition()));
+                return true;
+            }
+        });
 
     }
 

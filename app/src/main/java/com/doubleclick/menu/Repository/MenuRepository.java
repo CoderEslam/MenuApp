@@ -44,6 +44,7 @@ public class MenuRepository extends Repo {
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 MenuItem menuItem = snapshot.getValue(MenuItem.class);
+                Log.e(TAG, "onChildChanged: " + menuItem.getName());
                 menuInterface.updateMenuItem(menuItem);
             }
 
@@ -73,7 +74,6 @@ public class MenuRepository extends Repo {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     MenuItem menuItem = dataSnapshot.getValue(MenuItem.class);
                     menuItems.add(menuItem);
-                    Log.e(TAG, "onDataChange: " + menuItem.toString());
                 }
                 menuInterface.AllMenuItem(menuItems);
             }

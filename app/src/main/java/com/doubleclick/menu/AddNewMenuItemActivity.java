@@ -1,5 +1,6 @@
 package com.doubleclick.menu;
 
+import static com.doubleclick.menu.Model.Constant.FOOD;
 import static com.doubleclick.menu.Model.Constant.IMAGES;
 import static com.doubleclick.menu.Model.Constant.MENU;
 import static com.doubleclick.menu.Service.Network.isNetworkConnected;
@@ -12,16 +13,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.doubleclick.menu.Adapter.MenuAdapter;
 import com.doubleclick.menu.Interface.MenuOptions;
 import com.doubleclick.menu.Model.MenuItem;
@@ -46,8 +56,9 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private MenuViewModel menuViewModel;
     private MenuAdapter menuAdapter;
-    private Uri uri;
+    private Uri uri = null;
     private static final int IMAGE_REQUEST = 100;
+    private static final String TAG = "AddNewMenuItemActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +96,9 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onChanged(MenuItem menuItem) {
-                menuItems.set(menuItems.indexOf(menuItem), menuItem);
-                menuAdapter.notifyItemChanged(menuItems.indexOf(menuItem));
+                int pos = menuItems.indexOf(menuItem);
+                menuItems.set(pos, menuItem);
+                menuAdapter.notifyItemChanged(pos);
                 menuAdapter.notifyDataSetChanged();
             }
         });
@@ -163,5 +175,66 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                 }
             }
         });
+    }
+
+    @Override
+    public void UpdateMenu(MenuItem menuItem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewMenuItemActivity.this);
+        builder.setTitle(menuItem.getName());
+        View v = LayoutInflater.from(AddNewMenuItemActivity.this).inflate(R.layout.edit_menu_item, null, false);
+        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        v.setPadding(30, 5, 30, 5);
+        image = v.findViewById(R.id.image);
+        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage()).into(image);
+        image.setOnClickListener(view -> {
+            openImage();
+        });
+        TextInputEditText name = v.findViewById(R.id.name);
+        name.setText(menuItem.getName());
+        Button edit = v.findViewById(R.id.edit);
+        edit.setOnClickListener(view -> {
+            if (!Objects.requireNonNull(name.getText()).toString().equals("")) {
+                editDish(uri, name.getText().toString().trim(), menuItem.getId());
+            }
+        });
+        builder.setView(v);
+        builder.setCancelable(true);
+        builder.show();
+    }
+
+    public void editDish(Uri uri, String name, String id) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Uploading");
+        pd.show();
+        if (uri != null) {
+            final StorageReference fileReference = FirebaseStorage.getInstance()
+                    .getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
+            fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
+                url.addOnCompleteListener(task -> {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("image", task.getResult().toString());
+                    map.put("name", name);
+                    map.put("id", id);
+                    Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            pd.dismiss();
+                        }
+                    });
+
+                });
+            });
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("name", name);
+            map.put("id", id);
+            Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    pd.dismiss();
+                }
+            });
+        }
     }
 }

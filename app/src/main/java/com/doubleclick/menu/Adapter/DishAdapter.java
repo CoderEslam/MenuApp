@@ -1,5 +1,8 @@
 package com.doubleclick.menu.Adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +46,13 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         holder.name.setText(foods.get(holder.getAdapterPosition()).getName());
         holder.delete.setOnClickListener(view -> {
             foodOptions.deleteFood(foods.get(holder.getAdapterPosition()));
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                foodOptions.UpdateFood(foods.get(holder.getAdapterPosition()));
+                return true;
+            }
         });
     }
 

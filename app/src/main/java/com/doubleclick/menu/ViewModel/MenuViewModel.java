@@ -40,11 +40,11 @@ public class MenuViewModel extends ViewModel implements MenuInterface {
     }
 
     public LiveData<MenuItem> MenuItemUpdate() {
-        return menuItemDelete;
+        return menuItemUpdate;
     }
 
     public LiveData<MenuItem> MenuItemDelete() {
-        return menuItemUpdate;
+        return menuItemDelete;
     }
 
 

@@ -8,4 +8,6 @@ import com.doubleclick.menu.Model.Food;
 public interface FoodOptions {
     void deleteFood(Food food);
 
+    void UpdateFood(Food food);
+
 }

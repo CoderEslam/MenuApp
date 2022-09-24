@@ -13,12 +13,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.doubleclick.menu.Adapter.DishAdapter;
 import com.doubleclick.menu.Adapter.SpinnerAdapter;
@@ -49,16 +53,18 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     private MenuViewModel menuViewModel;
     private ImageView image;
-    private TextInputEditText name, price;
+    private TextInputEditText name, price, details;
     private SmartMaterialSpinner spinner;
     private RecyclerView dishs;
     private Button upload;
     private SpinnerAdapter spinnerAdapter;
     private final int IMAGE_REQUEST = 100;
-    private Uri uri;
-    private MenuItem menuItemSelected;
+    private Uri uri = null;
+    private MenuItem menuItemSelected = null;
     private FoodViewModel foodViewModel;
     private ArrayList<Food> foods = new ArrayList<>();
+    private ArrayList<MenuItem> menuItems = new ArrayList<>();
+
     private DishAdapter dishAdapter;
 
     @Override
@@ -71,12 +77,14 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         price = findViewById(R.id.price_food);
         upload = findViewById(R.id.upload);
         dishs = findViewById(R.id.dishs);
+        details = findViewById(R.id.details);
         dishAdapter = new DishAdapter(foods, this);
         dishs.setAdapter(dishAdapter);
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         foodViewModel.MenuOperators();
         menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         menuViewModel.MenuItemAll().observe(this, menuItems -> {
+            this.menuItems = menuItems;
             ArrayAdapter<MenuItem> adapter = new ArrayAdapter<MenuItem>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
@@ -110,8 +118,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onChanged(Food food) {
-                foods.set(foods.indexOf(food), food);
-                dishAdapter.notifyItemChanged(foods.indexOf(food));
+                int pos = foods.indexOf(food);
+                foods.set(pos, food);
+                dishAdapter.notifyItemChanged(pos);
                 dishAdapter.notifyDataSetChanged();
 
             }
@@ -133,7 +142,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         });
 
         upload.setOnClickListener(view -> {
-            uploadImage();
+            if (uri != null && !Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price.getText()).toString().equals("") && !Objects.requireNonNull(details.getText()).toString().equals("") && menuItemSelected != null) {
+                uploadImage(uri, name.getText().toString().trim(), price.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected);
+            }
         });
 
 
@@ -152,26 +163,78 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    public void uploadImage() {
-        if (uri != null && !Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price.getText()).toString().equals("")) {
-            final ProgressDialog pd = new ProgressDialog(this);
-            pd.setMessage("Uploading");
-            pd.show();
+    public void uploadImage(Uri uri, String n, String p, String d, MenuItem menuItem) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Uploading");
+        pd.show();
+        final StorageReference fileReference = FirebaseStorage.getInstance()
+                .getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
+            url.addOnCompleteListener(task -> {
+                HashMap<String, Object> map = new HashMap<>();
+                String id = Repo.refe.push().getKey() + System.currentTimeMillis();
+                map.put("image", task.getResult().toString());
+                map.put("name", n);
+                map.put("details", d);
+                map.put("price", Double.valueOf(p));
+                map.put("id", id);
+                map.put("idMenu", menuItem.getId());
+                Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        image.setImageURI(null);
+                        name.setText("");
+                        price.setText("");
+                        details.setText("");
+                        menuItemSelected = null;
+                        pd.dismiss();
+                    }
+                });
+
+            });
+        });
+
+    }
+
+    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id) {
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Uploading");
+        pd.show();
+        if (uri != null) {
             final StorageReference fileReference = FirebaseStorage.getInstance()
                     .getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 url.addOnCompleteListener(task -> {
                     HashMap<String, Object> map = new HashMap<>();
-                    String id = Repo.refe.push().getKey() + System.currentTimeMillis();
                     map.put("image", task.getResult().toString());
-                    map.put("name", name.getText().toString().trim());
-                    map.put("price", Double.valueOf(price.getText().toString().trim()));
+                    map.put("name", name);
+                    map.put("details", details);
+                    map.put("price", Double.valueOf(price));
                     map.put("id", id);
-                    map.put("idMenu", menuItemSelected.getId());
-                    Repo.refe.child(FOOD).child(id).updateChildren(map);
-                    pd.dismiss();
+                    map.put("idMenu", menuItem.getId());
+                    Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            pd.dismiss();
+                        }
+                    });
+
                 });
+            });
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("name", name);
+            map.put("details", details);
+            map.put("price", Double.valueOf(price));
+            map.put("id", id);
+            map.put("idMenu", menuItem.getId());
+            Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    pd.dismiss();
+                }
             });
         }
     }
@@ -195,5 +258,49 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 }
             }
         });
+    }
+
+    @Override
+    public void UpdateFood(Food food) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewDishActivity.this);
+        builder.setTitle(food.getName());
+        View v = LayoutInflater.from(AddNewDishActivity.this).inflate(R.layout.edit_dish_item, null, false);
+        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        v.setPadding(30, 5, 30, 5);
+        image = v.findViewById(R.id.image);
+        Glide.with(AddNewDishActivity.this).load(food.getImage()).into(image);
+        image.setOnClickListener(view -> {
+            openImage();
+        });
+        TextInputEditText name = v.findViewById(R.id.name);
+        TextInputEditText details = v.findViewById(R.id.details);
+        TextInputEditText price_food = v.findViewById(R.id.price_food);
+        SmartMaterialSpinner<MenuItem> spinner = v.findViewById(R.id.spinner);
+        name.setText(food.getName());
+        details.setText(food.getDetails());
+        price_food.setText(String.valueOf(food.getPrice()));
+        ArrayAdapter<MenuItem> adapter = new ArrayAdapter<MenuItem>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                menuItemSelected = menuItems.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        Button edit = v.findViewById(R.id.edit);
+        edit.setOnClickListener(view -> {
+            if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
+                editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected, food.getId());
+            }
+        });
+        builder.setView(v);
+        builder.setCancelable(true);
+        builder.show();
     }
 }

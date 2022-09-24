@@ -14,8 +14,15 @@ public class Food implements Parcelable {
     private double price;
     private String id;
     private String idMenu;
+    private String details;
 
     public Food() {
+        details = "";
+        image = "";
+        price = 0.0;
+        idMenu = "";
+        id = "";
+        name = "";
     }
 
     protected Food(Parcel in) {
@@ -24,6 +31,7 @@ public class Food implements Parcelable {
         price = in.readDouble();
         id = in.readString();
         idMenu = in.readString();
+        details = in.readString();
     }
 
     public static final Creator<Food> CREATOR = new Creator<Food>() {
@@ -70,19 +78,6 @@ public class Food implements Parcelable {
         this.id = id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(image);
-        parcel.writeDouble(price);
-        parcel.writeString(id);
-        parcel.writeString(idMenu);
-    }
 
     @Override
     public String toString() {
@@ -95,24 +90,47 @@ public class Food implements Parcelable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Food)) return false;
-        Food food = (Food) o;
-        return getId().equals(food.getId()) && idMenu.equals(food.idMenu);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), idMenu);
-    }
-
     public String getIdMenu() {
         return idMenu;
     }
 
     public void setIdMenu(String idMenu) {
         this.idMenu = idMenu;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(image);
+        parcel.writeDouble(price);
+        parcel.writeString(id);
+        parcel.writeString(idMenu);
+        parcel.writeString(details);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Food)) return false;
+        Food food = (Food) o;
+        return getId().equals(food.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

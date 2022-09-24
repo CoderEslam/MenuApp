@@ -1,6 +1,9 @@
 package com.doubleclick.menu.Adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +45,35 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.name_food.setText(foods.get(holder.getAdapterPosition()).getName());
         holder.price_food.setText(String.valueOf(foods.get(holder.getAdapterPosition()).getPrice()));
         holder.itemView.setOnClickListener(view -> {
-            holder.itemView.getContext().startActivity(new Intent(holder.itemView.getContext(), FoodActivity.class));
+            Intent intent = new Intent(holder.itemView.getContext(), FoodActivity.class);
+            intent.putExtra("food", foods.get(holder.getAdapterPosition()));
+            holder.itemView.getContext().startActivity(intent);
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                builder.setTitle(foods.get(holder.getAdapterPosition()).getName());
+                builder.setMessage(holder.itemView.getContext().getResources().getString(R.string.details));
+                TextView text = new TextView(holder.itemView.getContext());
+                text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                text.setTextSize(32f);
+                text.setGravity(Gravity.CENTER);
+                text.setPadding(30, 5, 30, 5);
+                text.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.black));
+                text.setText(foods.get(holder.getAdapterPosition()).getDetails());
+                builder.setView(text);
+                builder.setCancelable(true);
+                builder.setPositiveButton(holder.itemView.getContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+            }
         });
     }
 
@@ -52,6 +83,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
+
         private CircleImageView img_food;
         private TextView name_food, price_food;
 
@@ -60,7 +92,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             img_food = itemView.findViewById(R.id.img_food);
             name_food = itemView.findViewById(R.id.name_food);
             price_food = itemView.findViewById(R.id.price_food);
-
         }
     }
 }

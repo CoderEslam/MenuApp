@@ -7,6 +7,7 @@ public class Ingredients {
     private String id;
     private String image;
     private String name;
+    private String idFood;
 
     public String getId() {
         return id;
@@ -30,5 +31,13 @@ public class Ingredients {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIdFood() {
+        return idFood;
+    }
+
+    public void setIdFood(String idFood) {
+        this.idFood = idFood;
     }
 }

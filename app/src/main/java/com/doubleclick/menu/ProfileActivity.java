@@ -14,6 +14,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,7 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView email_tv;
     private Uri uri;
     private UserViewModel userViewModel;
-    private LinearLayout add_menu_item, add_new_dish, add_person, logout;
+    private LinearLayout add_menu_item, add_new_dish, add_person, logout, adding;
+    private View divider1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class ProfileActivity extends AppCompatActivity {
         add_new_dish = findViewById(R.id.add_new_dish);
         add_person = findViewById(R.id.add_person);
         logout = findViewById(R.id.logout);
+        adding = findViewById(R.id.adding);
+        divider1 = findViewById(R.id.divider1);
 
 
         back.setOnClickListener(view -> {
@@ -103,6 +107,13 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                if (user.getRole().equals(getResources().getStringArray(R.array.user_option)[0])) {
+                    adding.setVisibility(View.VISIBLE);
+                    divider1.setVisibility(View.VISIBLE);
+                } else {
+                    adding.setVisibility(View.GONE);
+                    divider1.setVisibility(View.GONE);
+                }
                 username_tv.setText(user.getName());
                 email_tv.setText(user.getEmail());
                 Glide.with(ProfileActivity.this).load(user.getImage()).into(app_bar_image);

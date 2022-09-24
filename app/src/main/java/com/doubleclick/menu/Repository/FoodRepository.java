@@ -41,21 +41,17 @@ public class FoodRepository extends Repo {
         refe.child(FOOD).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Food food = snapshot.getValue(Food.class);
-                Log.e(TAG, "onChildAdded: " + food.toString());
-                foodInterface.addFoodItem(food);
+                foodInterface.addFoodItem(snapshot.getValue(Food.class));
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Food food = snapshot.getValue(Food.class);
-                foodInterface.updateFoodItem(food);
+                foodInterface.updateFoodItem(snapshot.getValue(Food.class));
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                Food food = snapshot.getValue(Food.class);
-                foodInterface.deleteFoodItem(food);
+                foodInterface.deleteFoodItem(snapshot.getValue(Food.class));
             }
 
             @Override

@@ -63,7 +63,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout2"
+                        android:id="@+id/textInputLayout3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -72,11 +72,33 @@
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout1">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/details"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/gray"
+                            android:textSize="32sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/price_food"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/_price_"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:textColorHint="@color/gray"
@@ -95,7 +117,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
                         app:smsp_floatingLabelColor="@color/green"
                         app:smsp_floatingLabelText="@string/menu"
-                        app:smsp_hint="@string/food"
+                        app:smsp_hint="@string/menu"
                         app:smsp_hintColor="@color/black"
                         app:smsp_itemColor="@color/black"
                         app:smsp_itemListColor="@color/white"
