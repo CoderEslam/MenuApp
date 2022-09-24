@@ -1,5 +1,9 @@
 package com.doubleclick.menu.Adapter;
 
+import static com.doubleclick.menu.Model.Constant.USER;
+import static com.doubleclick.menu.Service.Network.isNetworkConnected;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +18,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.doubleclick.menu.AddPersonActivity;
 import com.doubleclick.menu.Interface.UserOptions;
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.R;
+import com.doubleclick.menu.Repository.Repo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,11 +44,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
     private ArrayList<User> users = new ArrayList<>();
     private UserOptions options;
+    private List<String> optionRole;
+    private static final String TAG = "UserAdapter";
 
 
-    public UserAdapter(ArrayList<User> users, UserOptions options) {
+    public UserAdapter(ArrayList<User> users, UserOptions options, List<String> optionRole) {
         this.users = users;
         this.options = options;
+        this.optionRole = optionRole;
     }
 
     @NonNull
@@ -45,19 +64,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         holder.name.setText(users.get(position).getName());
         Glide.with(holder.itemView.getContext()).load(users.get(position).getImage()).into(holder.image);
-        String[] option = holder.itemView.getContext().getResources().getStringArray(R.array.user_option);
+//        holder.setRole(users.get(holder.getAdapterPosition()).getId());
+        // on below line we are setting selection for our spinner to spinner position.
+        holder.spinner.setSelection(optionRole.indexOf(users.get(holder.getAdapterPosition()).getRole()));
         holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                options.RoleUser(users.get(holder.getAdapterPosition()), optionRole.get(i));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                holder.spinner.setSelection(1);
             }
         });
-        ArrayAdapter aa = new ArrayAdapter(holder.itemView.getContext(), android.R.layout.simple_spinner_item, option);
+        ArrayAdapter<String> aa = new ArrayAdapter<String>(holder.itemView.getContext(), android.R.layout.simple_spinner_item, optionRole);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.spinner.setAdapter(aa);
 
@@ -78,6 +99,38 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
             spinner = itemView.findViewById(R.id.spinner);
+        }
+
+        private void setRole(String userKey) {
+            Repo.refe.child(USER).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.hasChild(userKey)) {
+                            if (dataSnapshot.child(userKey).hasChild("role")) {
+                                Object role = Objects.requireNonNull(dataSnapshot.child(userKey).child("role").getValue()).toString();
+                                Log.e(TAG, "onDataChange: " + role);
+                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[0])) {
+                                    spinner.setSelection(0);
+                                }
+                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[1])) {
+                                    spinner.setSelection(1);
+                                }
+                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[2])) {
+                                    spinner.setSelection(2);
+                                }
+                            }
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

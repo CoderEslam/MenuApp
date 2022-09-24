@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.doubleclick.menu.FoodActivity;
 import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.R;
@@ -28,8 +29,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         this.foods = foods;
     }
 
-    public FoodAdapter() {
-    }
 
     @NonNull
     @Override
@@ -39,7 +38,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-
+        Glide.with(holder.itemView.getContext()).load(foods.get(holder.getAdapterPosition()).getImage()).into(holder.img_food);
+        holder.name_food.setText(foods.get(holder.getAdapterPosition()).getName());
+        holder.price_food.setText(String.valueOf(foods.get(holder.getAdapterPosition()).getPrice()));
         holder.itemView.setOnClickListener(view -> {
             holder.itemView.getContext().startActivity(new Intent(holder.itemView.getContext(), FoodActivity.class));
         });

@@ -4,8 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.doubleclick.menu.Interface.FoodInterface;
 import com.doubleclick.menu.Interface.MenuInterface;
+import com.doubleclick.menu.Model.Food;
+import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.Model.MenuItem;
+import com.doubleclick.menu.Repository.FoodRepository;
 import com.doubleclick.menu.Repository.MenuRepository;
 
 import java.util.ArrayList;
@@ -13,58 +17,58 @@ import java.util.ArrayList;
 /**
  * Created By Eslam Ghazy on 9/22/2022
  */
-public class FoodViewModel extends ViewModel implements MenuInterface {
+public class FoodViewModel extends ViewModel implements FoodInterface {
 
-    private MutableLiveData<MenuItem> menuItemAdd = new MutableLiveData<>();
-    private MutableLiveData<MenuItem> menuItemUpdate = new MutableLiveData<>();
-    private MutableLiveData<MenuItem> menuItemDelete = new MutableLiveData<>();
-    private MutableLiveData<ArrayList<MenuItem>> menuItemAll = new MutableLiveData<>();
+    private MutableLiveData<Food> foodItemAdd = new MutableLiveData<>();
+    private MutableLiveData<Food> foodItemUpdate = new MutableLiveData<>();
+    private MutableLiveData<Food> foodItemDelete = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<MenuFoods>> foodItemAll = new MutableLiveData<>();
 
 
-    MenuRepository menuRepository = new MenuRepository(this);
+    FoodRepository foodRepository = new FoodRepository(this);
 
     public FoodViewModel() {
-        menuRepository.Menu();
+        foodRepository.Menus();
     }
 
     public void MenuOperators() {
-        menuRepository.MenusOperator();
+        foodRepository.FoodsOperator();
     }
 
-    public LiveData<MenuItem> MenuItemAdd() {
-        return menuItemAdd;
+    public LiveData<Food> FoodItemAdd() {
+        return foodItemAdd;
     }
 
-    public LiveData<ArrayList<MenuItem>> MenuItemAll() {
-        return menuItemAll;
+    public LiveData<ArrayList<MenuFoods>> FoodItemAll() {
+        return foodItemAll;
     }
 
-    public LiveData<MenuItem> MenuItemUpdate() {
-        return menuItemDelete;
+    public LiveData<Food> FoodItemUpdate() {
+        return foodItemDelete;
     }
 
-    public LiveData<MenuItem> MenuItemDelete() {
-        return menuItemUpdate;
+    public LiveData<Food> FoodItemDelete() {
+        return foodItemUpdate;
     }
 
 
     @Override
-    public void addMenuItem(MenuItem menuItem) {
-        menuItemAdd.setValue(menuItem);
+    public void addFoodItem(Food food) {
+        foodItemAdd.setValue(food);
     }
 
     @Override
-    public void deleteMenuItem(MenuItem menuItem) {
-        menuItemDelete.setValue(menuItem);
+    public void deleteFoodItem(Food food) {
+        foodItemDelete.setValue(food);
     }
 
     @Override
-    public void updateMenuItem(MenuItem menuItem) {
-        menuItemUpdate.setValue(menuItem);
+    public void updateFoodItem(Food food) {
+        foodItemUpdate.setValue(food);
     }
 
     @Override
-    public void AllMenuItem(ArrayList<MenuItem> menuItems) {
-        menuItemAll.setValue(menuItems);
+    public void AllFoodsItem(ArrayList<MenuFoods> foods) {
+        foodItemAll.setValue(foods);
     }
 }

@@ -94,7 +94,7 @@
                         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
                         app:smsp_floatingLabelColor="@color/green"
-                        app:smsp_floatingLabelText="@string/user_role"
+                        app:smsp_floatingLabelText="@string/menu"
                         app:smsp_hint="@string/food"
                         app:smsp_hintColor="@color/black"
                         app:smsp_itemColor="@color/black"

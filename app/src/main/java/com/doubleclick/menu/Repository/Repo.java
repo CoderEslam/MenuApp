@@ -13,6 +13,7 @@ public class Repo {
 
     public static final DatabaseReference refe = FirebaseDatabase.getInstance().getReference();
     public static final String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid().toString();
+    public static final FirebaseAuth auth = FirebaseAuth.getInstance();
 
 
 }

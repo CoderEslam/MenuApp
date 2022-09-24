@@ -9,8 +9,8 @@
     <string name="price">12.99</string>
     <string name="profile_details">Profile Details</string>
     <string name="user_name">User name</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
     <string name="login">Login</string>
     <string name="input_email">Input email</string>
     <string name="input_password">Input password</string>
@@ -27,6 +27,12 @@
     <string name="waiter">Waiter</string>
     <string name="food">Food</string>
     <string name="_price_">price</string>
+    <string name="done">Done</string>
+    <string name="Register">register</string>
+    <string name="menu">Menu</string>
+    <string name="role">role</string>
+    <string name="required">All feild required</string>
+    <string name="logout">Logout</string>
     <string-array name="user_option">
         <item>Manger</item>
         <item>Waiter</item>

@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView email_tv;
     private Uri uri;
     private UserViewModel userViewModel;
-    private LinearLayout add_menu_item, add_new_dish, add_person;
+    private LinearLayout add_menu_item, add_new_dish, add_person, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +62,20 @@ public class ProfileActivity extends AppCompatActivity {
         add_menu_item = findViewById(R.id.add_menu_item);
         add_new_dish = findViewById(R.id.add_new_dish);
         add_person = findViewById(R.id.add_person);
+        logout = findViewById(R.id.logout);
 
 
         back.setOnClickListener(view -> {
             startActivity(new Intent(this, MenuActivity.class));
             finish();
         });
+
+        logout.setOnClickListener(view -> {
+            Repo.auth.signOut();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
+
 
         edit.setOnClickListener(view -> {
             EditFragment editFragment = new EditFragment();

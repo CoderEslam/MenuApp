@@ -10,6 +10,10 @@ import java.util.ArrayList;
 public interface UserInterface {
     void setUser(User user);
 
+    void UserAdd(User user);
+
+    void UserUpdate(User user);
+
     void setUsers(ArrayList<User> users);
 
 }

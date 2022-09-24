@@ -14,9 +14,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Fragment.PageFragment;
 import com.doubleclick.menu.Model.Food;
+import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Repository.Repo;
+import com.doubleclick.menu.ViewModel.FoodViewModel;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
 import com.doubleclick.menu.ViewModel.UserViewModel;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -36,6 +38,7 @@ public class MenuActivity extends AppCompatActivity {
     private SmartTabLayout viewPagerTab;
     private UserViewModel userViewModel;
     private MenuViewModel menuViewModel;
+    private FoodViewModel foodViewModel;
     private static final String TAG = "MenuActivity";
 
     @Override
@@ -48,6 +51,7 @@ public class MenuActivity extends AppCompatActivity {
         viewPagerTab = findViewById(R.id.viewpagertab);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
+        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         FragmentPagerItems.Creator creator = FragmentPagerItems.with(this);
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), creator.create());
         userViewModel.getUser().observe(this, new Observer<User>() {
@@ -61,18 +65,25 @@ public class MenuActivity extends AppCompatActivity {
         menuViewModel.MenuItemAll().observe(this, new Observer<ArrayList<MenuItem>>() {
             @Override
             public void onChanged(ArrayList<MenuItem> menuItems) {
-                for (MenuItem item : menuItems) {
-                    creator.add(item.getName(), PageFragment.class, new Bundler().putString("image", item.getImage()).get());
-                }
-                viewPager.setAdapter(adapter);
-                viewPagerTab.setViewPager(viewPager);
-                adapter.notifyDataSetChanged();
+
             }
         });
 
 
         image_profile.setOnClickListener(view -> {
             startActivity(new Intent(this, ProfileActivity.class));
+        });
+
+        foodViewModel.FoodItemAll().observe(this, new Observer<ArrayList<MenuFoods>>() {
+            @Override
+            public void onChanged(ArrayList<MenuFoods> menuFoods) {
+                for (MenuFoods item : menuFoods) {
+                    creator.add(item.getMenuItem().getName(), PageFragment.class, new Bundler().putParcelableArrayList("array", item.getFood()).putString("image", item.getMenuItem().getImage()).get());
+                }
+                viewPager.setAdapter(adapter);
+                viewPagerTab.setViewPager(viewPager);
+                adapter.notifyDataSetChanged();
+            }
         });
 
     }

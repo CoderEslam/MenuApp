@@ -25,7 +25,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SpinnerAdapter extends ArrayAdapter<MenuItem> {
 
     public SpinnerAdapter(@NonNull Context context, ArrayList<MenuItem> arrayList) {
-
         // pass the context and arrayList for the super
         // constructor of the ArrayAdapter class
         super(context, 0, arrayList);
@@ -44,14 +43,19 @@ public class SpinnerAdapter extends ArrayAdapter<MenuItem> {
         // get the position of the view from the ArrayAdapter
         MenuItem menuItem = getItem(position);
 
-        CircleImageView image = currentItemView.findViewById(R.id.image);
-        assert convertView != null;
-        Glide.with(convertView.getContext()).load(menuItem.getImage()).into(image);
+//        CircleImageView image = currentItemView.findViewById(R.id.image);
+//        assert convertView != null;
+//        Glide.with(convertView.getContext()).load(menuItem.getImage()).into(image);
 
         // then according to the position of the view assign the desired TextView 1 for the same
         TextView name = currentItemView.findViewById(R.id.name);
         name.setText(menuItem.getName());
 
         return currentItemView;
+    }
+
+    @Override
+    public void setDropDownViewResource(int resource) {
+        super.setDropDownViewResource(resource);
     }
 }

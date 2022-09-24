@@ -49,10 +49,6 @@ public class MenuItem {
 
     @Override
     public String toString() {
-        return "MenuItem{" +
-                "name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        return name;
     }
 }

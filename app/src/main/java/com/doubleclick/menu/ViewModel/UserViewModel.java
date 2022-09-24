@@ -18,6 +18,9 @@ public class UserViewModel extends ViewModel implements UserInterface {
 
 
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<User> userAdd = new MutableLiveData<>();
+    private MutableLiveData<User> userUpdate = new MutableLiveData<>();
+
     private MutableLiveData<ArrayList<User>> usersMutableLiveData = new MutableLiveData<>();
     private UserRepository userRepository = new UserRepository(this);
 
@@ -26,8 +29,19 @@ public class UserViewModel extends ViewModel implements UserInterface {
     }
 
     public LiveData<ArrayList<User>> getUsers() {
-        userRepository.Users();
         return usersMutableLiveData;
+    }
+
+    public void getUserOperation() {
+        userRepository.Users();
+    }
+
+    public LiveData<User> userAdd() {
+        return userAdd;
+    }
+
+    public LiveData<User> userUpdate() {
+        return userUpdate;
     }
 
     public LiveData<User> getUser() {
@@ -38,6 +52,16 @@ public class UserViewModel extends ViewModel implements UserInterface {
     @Override
     public void setUser(@NonNull User user) {
         userMutableLiveData.setValue(user);
+    }
+
+    @Override
+    public void UserAdd(User user) {
+        userAdd.setValue(user);
+    }
+
+    @Override
+    public void UserUpdate(User user) {
+        userUpdate.setValue(user);
     }
 
     @Override

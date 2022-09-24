@@ -43,11 +43,11 @@ public class PageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_IMAGE = "image";
-    private static final String ARG_PARAM2 = "array";
+    private static final String ARG_ARRAY = "array";
     private static final String TAG = "PageFragment";
     // TODO: Rename and change types of parameters
     private String mImage;
-    private ArrayList<Food> mParam2;
+    private ArrayList<Food> marray;
 
     private RecyclerView foods;
     private ImageView bg_image;
@@ -69,7 +69,7 @@ public class PageFragment extends Fragment {
         PageFragment fragment = new PageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_IMAGE, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_ARRAY, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,7 +79,7 @@ public class PageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mImage = getArguments().getString(ARG_IMAGE);
-            mParam2 = getArguments().getParcelableArrayList(ARG_PARAM2);
+            marray = getArguments().getParcelableArrayList(ARG_ARRAY);
         }
     }
 
@@ -108,9 +108,7 @@ public class PageFragment extends Fragment {
         });
         //second parametre is radius
 
-        foods.setAdapter(new FoodAdapter());
-        Log.e(TAG, "onViewCreated: " + mImage);
-        Log.e(TAG, "onViewCreated: " + mParam2);
+        foods.setAdapter(new FoodAdapter(marray));
     }
 
 

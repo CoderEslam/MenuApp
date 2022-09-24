@@ -5,9 +5,11 @@ import static com.doubleclick.menu.Model.Constant.USER;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Interface.UserInterface;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -46,17 +48,29 @@ public class UserRepository extends Repo {
 
     public void Users() {
         refe.keepSynced(true);
-        refe.child(USER).addValueEventListener(new ValueEventListener() {
+        refe.child(USER).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    Log.e(TAG, "onDataChange: " + user.toString());
-                    assert user != null;
-                    users.add(user);
-                    userInterface.setUsers(users);
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                assert user != null;
+                userInterface.UserAdd(user);
+            }
 
-                }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                assert user != null;
+                userInterface.UserUpdate(user);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override

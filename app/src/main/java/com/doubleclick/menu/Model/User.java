@@ -57,6 +57,18 @@ public class User {
         this.role = role;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,17 +80,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getEmail());
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                '}';
     }
 }

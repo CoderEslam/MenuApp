@@ -3,6 +3,7 @@ package com.doubleclick.menu.Interface;
 import android.view.MenuInflater;
 
 import com.doubleclick.menu.Model.Food;
+import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.Model.MenuItem;
 
 import java.util.ArrayList;
@@ -18,6 +19,6 @@ public interface FoodInterface {
 
     void updateFoodItem(Food food);
 
-    void AllFoodsItem(ArrayList<ArrayList<Food>> foods);
+    void AllFoodsItem(ArrayList<MenuFoods> foods);
 
 }

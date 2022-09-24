@@ -3,6 +3,8 @@ package com.doubleclick.menu.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Created By Eslam Ghazy on 9/21/2022
  */
@@ -91,5 +93,26 @@ public class Food implements Parcelable {
                 ", id='" + id + '\'' +
                 ", idMenu='" + idMenu + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Food)) return false;
+        Food food = (Food) o;
+        return getId().equals(food.getId()) && idMenu.equals(food.idMenu);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), idMenu);
+    }
+
+    public String getIdMenu() {
+        return idMenu;
+    }
+
+    public void setIdMenu(String idMenu) {
+        this.idMenu = idMenu;
     }
 }
