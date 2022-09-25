@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">قائمه الطعام</string>
+    <string name="sign_in">تسجيل دخول</string>
+    <string name="sign_up">مستخدم جديد</string>
+    <string name="name">الاسم</string>
+    <string name="euro">€</string>
+    <string name="price">0.0</string>
+    <string name="profile_details">التفاصيل</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="email">"الاميل "</string>
+    <string name="password">الرقم السري</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="input_email">ادخل الاميل</string>
+    <string name="input_password">ادخل الرقم السري</string>
+    <string name="ingrendiets">المكونات</string>
+    <string name="details">تفاصيل</string>
+    <string name="add_menu_item">اضافة قائمه طعام</string>
+    <string name="add_new_dish">اضافه طبق جديد</string>
+    <string name="add_new_person">اضافه مستخدم جديد</string>
+    <string name="upload">تحميل</string>
+    <string name="deleted">مسح</string>
+    <string name="edit">تعديل</string>
+    <string name="update">تحديث</string>
+    <string name="user_role">دور المستخدم</string>
+    <string name="waiter">الدور</string>
+    <string name="food">طعام</string>
+    <string name="_price_">السعر</string>
+    <string name="done">تم</string>
+    <string name="yes">تم</string>
+    <string name="logout">تسجيل خروج</string>
+    <string name="required">كل الحقول مطلوبة</string>
+    <string name="role">دور</string>
+    <string name="Register">تسجيل</string>
+    <string name="menu">قائمه الطعام</string>
+    <string name="disable">تم حظر حسابك</string>
+    <string-array name="user_option">
+        <item>مدير</item>
+        <item>نادل</item>
+        <item>ايقاف</item>
+    </string-array>
+</resources>

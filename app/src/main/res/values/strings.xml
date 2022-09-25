@@ -2,20 +2,19 @@
     <string name="app_name">Menu</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
-    <string name="name">name</string>
+    <string name="name">Name</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="euro">€</string>
     <string name="price">0.0</string>
     <string name="profile_details">Profile Details</string>
-    <string name="user_name">User name</string>
-    <string name="email">email</string>
+    <string name="user_name">Username</string>
+    <string name="email">Email</string>
     <string name="password">password</string>
     <string name="login">Login</string>
     <string name="input_email">Input email</string>
     <string name="input_password">Input password</string>
     <string name="ingrendiets">Ingredients</string>
-    <string name="details">details</string>
+    <string name="details">Details</string>
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_new_dish">Add New Dish</string>
     <string name="add_new_person">Add New Person</string>
@@ -24,16 +23,17 @@
     <string name="edit">Edit</string>
     <string name="update">Update</string>
     <string name="user_role">User Role</string>
-    <string name="waiter">Waiter</string>
+    <string name="waiter">Role</string>
     <string name="food">Food</string>
-    <string name="_price_">price</string>
+    <string name="_price_">Price</string>
     <string name="done">Done</string>
-    <string name="Register">register</string>
+    <string name="Register">Register</string>
     <string name="menu">Menu</string>
-    <string name="role">role</string>
-    <string name="required">All feild required</string>
+    <string name="role">Role</string>
+    <string name="required">All field required</string>
     <string name="logout">Logout</string>
-    <string name="yes">yes</string>
+    <string name="yes">Yes</string>
+    <string name="disable">Your account has been blocked</string>
     <string-array name="user_option">
         <item>Manger</item>
         <item>Waiter</item>

@@ -6,6 +6,7 @@ import static com.doubleclick.menu.Model.Constant.USER;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -49,7 +50,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView email_tv;
     private Uri uri;
     private UserViewModel userViewModel;
-    private LinearLayout add_menu_item, add_new_dish, add_person, logout, adding;
+    private LinearLayout add_menu_item, add_new_dish, add_person, logout;
+    private CardView adding;
     private View divider1;
 
     @Override
@@ -107,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if (user.getRole().equals(getResources().getStringArray(R.array.user_option)[0])) {
+                if (user.getRole().equals("Manger") || user.getRole().equals("مدير") || user.getRole().equals("Deshabilitar")) {
                     adding.setVisibility(View.VISIBLE);
                     divider1.setVisibility(View.VISIBLE);
                 } else {

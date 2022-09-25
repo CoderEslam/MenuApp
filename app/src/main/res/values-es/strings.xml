@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Menu</string>
+    <string name="sign_in">Iniciar sesión</string>
+    <string name="sign_up">Inscribirse</string>
+    <string name="name">Nombre</string>
+    <string name="euro">€</string>
+    <string name="price">0.0</string>
+    <string name="profile_details">Detalles del perfil</string>
+    <string name="user_name">Nombre de usuario</string>
+    <string name="email">Email</string>
+    <string name="password">Clave</string>
+    <string name="login">Acceso</string>
+    <string name="input_email">Introducir correo electrónico</string>
+    <string name="input_password">Contraseña de entrada</string>
+    <string name="ingrendiets">Ingredientes</string>
+    <string name="details">Detalles</string>
+    <string name="add_menu_item">Agregar elemento de menú</string>
+    <string name="add_new_dish">Agregar nuevo plato</string>
+    <string name="add_new_person">Agregar nuevo persona</string>
+    <string name="upload">Subir</string>
+    <string name="deleted">Eliminado</string>
+    <string name="edit">Editar</string>
+    <string name="update">Actualizar</string>
+    <string name="user_role">Rol del usuario</string>
+    <string name="waiter">Role</string>
+    <string name="food">Alimento</string>
+    <string name="_price_">Precio</string>
+    <string name="done">Hecho</string>
+    <string name="yes">sí</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="required">Todos los campos requeridos</string>
+    <string name="role">Role</string>
+    <string name="Register">Registrarse</string>
+    <string name="menu">Menú</string>
+    <string name="disable">Tu cuenta ha sido bloqueada</string>
+    <string-array name="user_option">
+        <item>Pesebre</item>
+        <item>Mesero</item>
+        <item>Deshabilitar</item>
+    </string-array>
+</resources>

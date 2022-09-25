@@ -114,6 +114,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 dishAdapter.notifyDataSetChanged();
             }
         });
+
         foodViewModel.FoodItemUpdate().observe(this, new Observer<Food>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override

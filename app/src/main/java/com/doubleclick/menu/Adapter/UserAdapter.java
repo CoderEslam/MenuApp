@@ -64,7 +64,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         holder.name.setText(users.get(position).getName());
         Glide.with(holder.itemView.getContext()).load(users.get(position).getImage()).into(holder.image);
-//        holder.setRole(users.get(holder.getAdapterPosition()).getId());
+        holder.setRole(users.get(holder.getAdapterPosition()).getId());
         // on below line we are setting selection for our spinner to spinner position.
         holder.spinner.setSelection(optionRole.indexOf(users.get(holder.getAdapterPosition()).getRole()));
         holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -75,7 +75,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                holder.spinner.setSelection(1);
+//                holder.spinner.setSelection(1);
             }
         });
         ArrayAdapter<String> aa = new ArrayAdapter<String>(holder.itemView.getContext(), android.R.layout.simple_spinner_item, optionRole);
@@ -109,14 +109,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                         if (dataSnapshot.hasChild(userKey)) {
                             if (dataSnapshot.child(userKey).hasChild("role")) {
                                 Object role = Objects.requireNonNull(dataSnapshot.child(userKey).child("role").getValue()).toString();
-                                Log.e(TAG, "onDataChange: " + role);
-                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[0])) {
+                                if (role.toString().equals("Manger") || role.toString().equals("مدير") || role.toString().equals("Pesebre")) {
                                     spinner.setSelection(0);
-                                }
-                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[1])) {
+                                } else if (role.toString().equals("Waiter") || role.toString().equals("نادل") || role.toString().equals("Mesero")) {
                                     spinner.setSelection(1);
-                                }
-                                if (role.toString().equals(itemView.getContext().getResources().getStringArray(R.array.user_option)[2])) {
+                                } else if (role.toString().equals("Disable") || role.toString().equals("ايقاف") || role.toString().equals("Deshabilitar")) {
                                     spinner.setSelection(2);
                                 }
                             }

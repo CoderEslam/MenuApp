@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Fragment.PageFragment;
@@ -57,6 +58,11 @@ public class MenuActivity extends AppCompatActivity {
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                if (user.getRole().equals("Disable") || user.getRole().equals("ايقاف") || user.getRole().equals("Deshabilitar")) {
+                    Toast.makeText(MenuActivity.this, getResources().getString(R.string.disable), Toast.LENGTH_SHORT).show();
+                    Repo.auth.signOut();
+                    startActivity(new Intent(MenuActivity.this, MainActivity.class));
+                }
                 name.setText(user.getName());
                 Glide.with(MenuActivity.this).load(user.getImage()).into(image_profile);
             }
