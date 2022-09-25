@@ -182,13 +182,13 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 map.put("id", id);
                 map.put("idMenu", menuItem.getId());
                 Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @SuppressLint("UseCompatLoadingForDrawables")
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        image.setImageURI(null);
+                        image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
                         name.setText("");
                         price.setText("");
                         details.setText("");
-                        menuItemSelected = null;
                         pd.dismiss();
                     }
                 });
@@ -298,6 +298,8 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         edit.setOnClickListener(view -> {
             if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
                 editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected, food.getId());
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
             }
         });
         builder.setView(v);

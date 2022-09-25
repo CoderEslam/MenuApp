@@ -34,6 +34,7 @@
     <string name="logout">Logout</string>
     <string name="yes">Yes</string>
     <string name="disable">Your account has been blocked</string>
+    <string name="choose_menu">Choose menu</string>
     <string-array name="user_option">
         <item>Manger</item>
         <item>Waiter</item>

@@ -145,10 +145,11 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                     map.put("name", name.getText().toString().trim());
                     map.put("id", id);
                     Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @SuppressLint("UseCompatLoadingForDrawables")
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             name.setText("");
-                            image.setImageURI(null);
+                            image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
                         }
                     });
                     pd.dismiss();

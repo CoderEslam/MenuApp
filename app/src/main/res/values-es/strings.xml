@@ -34,6 +34,7 @@
     <string name="Register">Registrarse</string>
     <string name="menu">Menú</string>
     <string name="disable">Tu cuenta ha sido bloqueada</string>
+    <string name="choose_menu">elegir menú</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>
