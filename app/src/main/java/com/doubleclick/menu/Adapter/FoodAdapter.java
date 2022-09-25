@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -84,7 +85,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView img_food;
+        private ImageView img_food;
         private TextView name_food, price_food;
 
         public FoodViewHolder(@NonNull View itemView) {
