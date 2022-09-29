@@ -35,6 +35,7 @@
     <string name="menu">قائمه الطعام</string>
     <string name="disable">تم حظر حسابك</string>
     <string name="choose_menu">اختر القائمة</string>
+    <string name="no_internet">لا يوجد اتصال بالانترنت</string>
 
     <string-array name="user_option">
         <item>مدير</item>

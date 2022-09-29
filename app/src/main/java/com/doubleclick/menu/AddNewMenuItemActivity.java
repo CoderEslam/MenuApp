@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -194,8 +195,12 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         name.setText(menuItem.getName());
         Button edit = v.findViewById(R.id.edit);
         edit.setOnClickListener(view -> {
-            if (!Objects.requireNonNull(name.getText()).toString().equals("")) {
-                editDish(uri, name.getText().toString().trim(), menuItem.getId());
+            if (isNetworkConnected(AddNewMenuItemActivity.this)) {
+                if (!Objects.requireNonNull(name.getText()).toString().equals("")) {
+                    editDish(uri, name.getText().toString().trim(), menuItem.getId(), builder);
+                }
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
         });
         builder.setView(v);
@@ -203,7 +208,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         builder.show();
     }
 
-    public void editDish(Uri uri, String name, String id) {
+    public void editDish(Uri uri, String name, String id, AlertDialog.Builder builder) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -221,6 +226,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             pd.dismiss();
+                            Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -234,6 +240,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     pd.dismiss();
+                    Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                 }
             });
         }

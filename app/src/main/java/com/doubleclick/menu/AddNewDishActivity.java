@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -198,7 +199,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     }
 
-    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id) {
+    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id, AlertDialog.Builder builder) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -219,6 +220,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             pd.dismiss();
+                            Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -235,6 +237,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     pd.dismiss();
+                    Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -296,11 +299,16 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         });
         Button edit = v.findViewById(R.id.edit);
         edit.setOnClickListener(view -> {
-            if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
-                editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected, food.getId());
+            if (isNetworkConnected(AddNewDishActivity.this)) {
+                if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
+                    editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected, food.getId(), builder);
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
+
         });
         builder.setView(v);
         builder.setCancelable(true);

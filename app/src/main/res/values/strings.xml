@@ -35,6 +35,7 @@
     <string name="yes">Yes</string>
     <string name="disable">Your account has been blocked</string>
     <string name="choose_menu">Choose menu</string>
+    <string name="no_internet">No internet connection</string>
     <string-array name="user_option">
         <item>Manger</item>
         <item>Waiter</item>
