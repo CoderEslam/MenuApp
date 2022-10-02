@@ -63,4 +63,8 @@ public class MenuItem {
     public String toString() {
         return name;
     }
+
+    public String Menu() {
+        return name + "\n" + id;
+    }
 }

@@ -2,13 +2,11 @@ package com.doubleclick.menu;
 
 import static com.doubleclick.menu.Model.Constant.FOOD;
 import static com.doubleclick.menu.Model.Constant.IMAGES;
-import static com.doubleclick.menu.Model.Constant.USER;
 import static com.doubleclick.menu.Service.Network.isNetworkConnected;
 
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,10 +14,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +31,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.doubleclick.menu.Adapter.DishAdapter;
-import com.doubleclick.menu.Adapter.SpinnerAdapter;
 import com.doubleclick.menu.Interface.FoodOptions;
 import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
@@ -52,22 +48,18 @@ import java.util.Objects;
 
 public class AddNewDishActivity extends AppCompatActivity implements FoodOptions {
 
-    private MenuViewModel menuViewModel;
     private ImageView image;
     private TextInputEditText name, price, details;
-    private SmartMaterialSpinner spinner;
-    private RecyclerView dishs;
-    private Button upload;
-    private SpinnerAdapter spinnerAdapter;
+    private SmartMaterialSpinner<MenuItem> spinner;
     private final int IMAGE_REQUEST = 100;
     private Uri uri = null;
     private MenuItem menuItemSelected = null;
-    private FoodViewModel foodViewModel;
     private ArrayList<Food> foods = new ArrayList<>();
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
-
     private DishAdapter dishAdapter;
+    private static final String TAG = "AddNewDishActivity";
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,17 +68,17 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         name = findViewById(R.id.name);
         spinner = findViewById(R.id.spinner);
         price = findViewById(R.id.price_food);
-        upload = findViewById(R.id.upload);
-        dishs = findViewById(R.id.dishs);
+        Button upload = findViewById(R.id.upload);
+        RecyclerView dishs = findViewById(R.id.dishs);
         details = findViewById(R.id.details);
         dishAdapter = new DishAdapter(foods, this);
         dishs.setAdapter(dishAdapter);
-        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
+        FoodViewModel foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         foodViewModel.MenuOperators();
-        menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
+        MenuViewModel menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         menuViewModel.MenuItemAll().observe(this, menuItems -> {
             this.menuItems = menuItems;
-            ArrayAdapter<MenuItem> adapter = new ArrayAdapter<MenuItem>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
+            ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -100,48 +92,31 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
                 }
             });
-            /*spinnerAdapter = new SpinnerAdapter(AddNewDishActivity.this, menuItems);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerAdapter);*/
 
         });
 
-        foodViewModel.FoodItemAdd().observe(this, new Observer<Food>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(Food food) {
-                foods.add(food);
-                dishAdapter.notifyItemInserted(foods.size() - 1);
-                dishAdapter.notifyDataSetChanged();
-            }
+        foodViewModel.FoodItemAdd().observe(this, food -> {
+            foods.add(food);
+            dishAdapter.notifyItemInserted(foods.size() - 1);
+            dishAdapter.notifyDataSetChanged();
         });
 
-        foodViewModel.FoodItemUpdate().observe(this, new Observer<Food>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(Food food) {
-                int pos = foods.indexOf(food);
-                foods.set(pos, food);
-                dishAdapter.notifyItemChanged(pos);
-                dishAdapter.notifyDataSetChanged();
+        foodViewModel.FoodItemUpdate().observe(this, food -> {
+            int pos = foods.indexOf(food);
+            foods.set(pos, food);
+            dishAdapter.notifyItemChanged(pos);
+            dishAdapter.notifyDataSetChanged();
 
-            }
         });
 
-        foodViewModel.FoodItemDelete().observe(this, new Observer<Food>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(Food food) {
-                foods.remove(food);
-                dishAdapter.notifyItemRemoved(foods.indexOf(food));
-                dishAdapter.notifyDataSetChanged();
+        foodViewModel.FoodItemDelete().observe(this, food -> {
+            foods.remove(food);
+            dishAdapter.notifyItemRemoved(foods.indexOf(food));
+            dishAdapter.notifyDataSetChanged();
 
-            }
         });
 
-        image.setOnClickListener(view -> {
-            openImage();
-        });
+        image.setOnClickListener(view -> openImage());
 
         upload.setOnClickListener(view -> {
             if (uri != null && !Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price.getText()).toString().equals("") && !Objects.requireNonNull(details.getText()).toString().equals("") && menuItemSelected != null) {
@@ -165,6 +140,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     public void uploadImage(Uri uri, String n, String p, String d, MenuItem menuItem) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
@@ -182,16 +158,12 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 map.put("price", Double.valueOf(p));
                 map.put("id", id);
                 map.put("idMenu", menuItem.getId());
-                Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @SuppressLint("UseCompatLoadingForDrawables")
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
-                        name.setText("");
-                        price.setText("");
-                        details.setText("");
-                        pd.dismiss();
-                    }
+                Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(task1 -> {
+                    image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                    name.setText("");
+                    price.setText("");
+                    details.setText("");
+                    pd.dismiss();
                 });
 
             });
@@ -199,7 +171,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     }
 
-    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id, AlertDialog.Builder builder) {
+    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -216,12 +188,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                     map.put("price", Double.valueOf(price));
                     map.put("id", id);
                     map.put("idMenu", menuItem.getId());
-                    Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            pd.dismiss();
-                            Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
-                        }
+                    Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(task1 -> {
+                        pd.dismiss();
+                        Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                     });
 
                 });
@@ -233,12 +202,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
             map.put("price", Double.valueOf(price));
             map.put("id", id);
             map.put("idMenu", menuItem.getId());
-            Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    pd.dismiss();
-                    Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
-                }
+            Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(task -> {
+                pd.dismiss();
+                Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -254,12 +220,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     @Override
     public void deleteFood(Food food) {
-        Repo.refe.child(FOOD).child(food.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful() && isNetworkConnected(AddNewDishActivity.this)) {
-                    Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
-                }
+        Repo.refe.child(FOOD).child(food.getId()).removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && isNetworkConnected(AddNewDishActivity.this)) {
+                Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -273,9 +236,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         v.setPadding(30, 5, 30, 5);
         image = v.findViewById(R.id.image);
         Glide.with(AddNewDishActivity.this).load(food.getImage()).into(image);
-        image.setOnClickListener(view -> {
-            openImage();
-        });
+        image.setOnClickListener(view -> openImage());
         TextInputEditText name = v.findViewById(R.id.name);
         TextInputEditText details = v.findViewById(R.id.details);
         TextInputEditText price_food = v.findViewById(R.id.price_food);
@@ -284,7 +245,8 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         details.setText(food.getDetails());
         price_food.setText(String.valueOf(food.getPrice()));
         spinner.setSelection(menuItems.indexOf(new MenuItem(food.getIdMenu())));
-        ArrayAdapter<MenuItem> adapter = new ArrayAdapter<MenuItem>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
+        Log.e(TAG, "UpdateFood: " + menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu()))).Menu());
+        ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -302,7 +264,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         edit.setOnClickListener(view -> {
             if (isNetworkConnected(AddNewDishActivity.this)) {
                 if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
-                    editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected, food.getId(), builder);
+                    editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), Objects.requireNonNull(details.getText()).toString().trim(), menuItemSelected, food.getId());
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
                 }
