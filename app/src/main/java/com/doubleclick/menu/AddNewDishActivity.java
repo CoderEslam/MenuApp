@@ -283,6 +283,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         name.setText(food.getName());
         details.setText(food.getDetails());
         price_food.setText(String.valueOf(food.getPrice()));
+        spinner.setSelection(menuItems.indexOf(new MenuItem(food.getIdMenu())));
         ArrayAdapter<MenuItem> adapter = new ArrayAdapter<MenuItem>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -294,7 +295,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                menuItemSelected = menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu())));
             }
         });
         Button edit = v.findViewById(R.id.edit);

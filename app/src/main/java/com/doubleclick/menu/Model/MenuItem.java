@@ -10,6 +10,18 @@ public class MenuItem {
     private String image;
     private String id;
 
+    public MenuItem(String id) {
+        this.id = id;
+        name = "";
+        image = "";
+    }
+
+    public MenuItem() {
+        name = "";
+        id = "";
+        image = "";
+    }
+
     public String getName() {
         return name;
     }
