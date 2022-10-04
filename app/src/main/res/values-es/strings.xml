@@ -36,6 +36,7 @@
     <string name="disable">Tu cuenta ha sido bloqueada</string>
     <string name="choose_menu">elegir menú</string>
     <string name="no_internet">Sin conexión a Internet</string>
+    <string name="see_menu">Ver Menú</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>

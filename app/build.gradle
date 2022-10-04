@@ -56,4 +56,9 @@ dependencies {
     //Spinner
     implementation 'com.github.chivorns:smartmaterialspinner:1.5.0'
 
+    //drag-drop-swipe-recyclerview
+    implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:1.1.0'
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.doubleclick.menu.Repository;
 
+import static com.doubleclick.menu.Model.Constant.INDEX;
 import static com.doubleclick.menu.Model.Constant.MENU;
 import static com.doubleclick.menu.Model.Constant.USER;
 
@@ -34,7 +35,7 @@ public class MenuRepository extends Repo {
 
     public void MenusOperator() {
         refe.keepSynced(true);
-        refe.child(MENU).addChildEventListener(new ChildEventListener() {
+        refe.child(MENU).orderByChild(INDEX).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 MenuItem menuItem = snapshot.getValue(MenuItem.class);
@@ -68,7 +69,7 @@ public class MenuRepository extends Repo {
 
     public void Menu() {
         refe.keepSynced(true);
-        refe.child(MENU).addListenerForSingleValueEvent(new ValueEventListener() {
+        refe.child(MENU).orderByChild(INDEX).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

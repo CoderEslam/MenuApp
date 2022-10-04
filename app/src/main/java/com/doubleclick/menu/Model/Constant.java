@@ -8,4 +8,5 @@ public class Constant {
     public static final String MENU = "Menu";
     public static final String FOOD = "Food";
     public static final String IMAGES = "Images";
+    public static final String INDEX = "index";
 }

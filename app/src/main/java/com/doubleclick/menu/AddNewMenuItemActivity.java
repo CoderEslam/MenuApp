@@ -33,11 +33,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
+import com.doubleclick.menu.Adapter.DragDropAdapter;
 import com.doubleclick.menu.Adapter.MenuAdapter;
 import com.doubleclick.menu.Interface.MenuOptions;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
+import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView;
+import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener;
+import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,6 +50,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOptions {
@@ -61,6 +66,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
     private static final int IMAGE_REQUEST = 100;
     private static final String TAG = "AddNewMenuItemActivity";
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,18 +75,32 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         name = findViewById(R.id.name);
         upload = findViewById(R.id.upload);
         menu_items = findViewById(R.id.menu_items);
-        menuAdapter = new MenuAdapter(menuItems, this);
+        menuAdapter = new MenuAdapter(menuItems, AddNewMenuItemActivity.this);
         menu_items.setAdapter(menuAdapter);
         menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         menuViewModel.MenuOperators();
-        menuViewModel.MenuItemAdd().observe(this, new Observer<MenuItem>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(MenuItem menuItem) {
-                menuItems.add(menuItem);
-                menuAdapter.notifyItemInserted(menuItems.size() - 1);
-                menuAdapter.notifyDataSetChanged();
-            }
+        menuViewModel.MenuItemAdd().observe(this, menuItem -> {
+            menuItems.add(menuItem);
+            menuAdapter.notifyItemInserted(menuItems.size() - 1);
+            menuAdapter.notifyDataSetChanged();
+            /*menu_items.setDragListener(new OnItemDragListener<Object>() {
+                @Override
+                public void onItemDropped(int previousPosition, int newPosition, Object item) {
+                    try {
+                        MenuItem m = menuItems.set(newPosition, menuItems.get(menuItems.indexOf(new MenuItem(item))));
+                        Log.e(TAG, "onItemDropped: " + previousPosition + " => " + newPosition + " => " + m.Menu());
+                        updateIndex(newPosition);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        Log.e(TAG, "Error : " + e);
+                    }
+
+                }
+
+                @Override
+                public void onItemDragged(int initialPosition, int finalPosition, Object item) {
+//                        Log.e(TAG, "onItemDropped: " + initialPosition + " => " + finalPosition);
+                }
+            });*/
         });
 
         menuViewModel.MenuItemDelete().observe(this, new Observer<MenuItem>() {
@@ -112,6 +132,14 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             uploadImage();
         });
 
+    }
+
+    private void updateIndex(int index) {
+        HashMap<String, Object> map = new HashMap<>();
+//        for (int i = 0; i < menuItems.size(); i++) {
+        map.put("index", index);
+        Repo.refe.child(MENU).child(menuItems.get(index).getId()).updateChildren(map);
+//        }
     }
 
     public void openImage() {

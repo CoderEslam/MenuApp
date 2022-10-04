@@ -1,6 +1,7 @@
 package com.doubleclick.menu.Repository;
 
 import static com.doubleclick.menu.Model.Constant.FOOD;
+import static com.doubleclick.menu.Model.Constant.INDEX;
 import static com.doubleclick.menu.Model.Constant.MENU;
 
 import android.util.Log;
@@ -68,7 +69,7 @@ public class FoodRepository extends Repo {
 
     public void Menus() {
         refe.keepSynced(true);
-        refe.child(MENU).addListenerForSingleValueEvent(new ValueEventListener() {
+        refe.child(MENU).orderByChild(INDEX).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

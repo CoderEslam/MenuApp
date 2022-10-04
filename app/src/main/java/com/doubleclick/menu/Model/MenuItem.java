@@ -9,17 +9,27 @@ public class MenuItem {
     private String name;
     private String image;
     private String id;
+    private int index;
 
     public MenuItem(String id) {
         this.id = id;
         name = "";
         image = "";
+        index = 0;
+    }
+
+    public MenuItem(Object name) {
+        this.id = "";
+        this.name = name.toString();
+        image = "";
+        index = 0;
     }
 
     public MenuItem() {
         name = "";
         id = "";
         image = "";
+        index = 0;
     }
 
     public String getName() {
@@ -51,7 +61,7 @@ public class MenuItem {
         if (this == o) return true;
         if (!(o instanceof MenuItem)) return false;
         MenuItem menuItem = (MenuItem) o;
-        return getId().equals(menuItem.getId());
+        return (getId().equals(menuItem.getId()) || getName().equals(menuItem.getName()));
     }
 
     @Override
@@ -66,5 +76,13 @@ public class MenuItem {
 
     public String Menu() {
         return name + "\n" + id;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

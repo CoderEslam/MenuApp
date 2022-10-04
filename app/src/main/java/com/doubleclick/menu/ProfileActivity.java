@@ -50,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView email_tv;
     private Uri uri;
     private UserViewModel userViewModel;
-    private LinearLayout add_menu_item, add_new_dish, add_person, logout;
+    private LinearLayout add_menu_item, add_new_dish, add_person, see_menu, logout;
     private CardView adding;
     private View divider1;
 
@@ -66,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
         add_menu_item = findViewById(R.id.add_menu_item);
         add_new_dish = findViewById(R.id.add_new_dish);
         add_person = findViewById(R.id.add_person);
+        see_menu = findViewById(R.id.see_menu);
         logout = findViewById(R.id.logout);
         adding = findViewById(R.id.adding);
         divider1 = findViewById(R.id.divider1);
@@ -74,6 +75,9 @@ public class ProfileActivity extends AppCompatActivity {
         back.setOnClickListener(view -> {
             startActivity(new Intent(this, MenuActivity.class));
             finish();
+        });
+        see_menu.setOnClickListener(view -> {
+            startActivity(new Intent(this, SeeMenuActivity.class));
         });
 
         logout.setOnClickListener(view -> {
