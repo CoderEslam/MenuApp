@@ -194,16 +194,29 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
 
     @Override
     public void deleteMenu(MenuItem menuItem) {
-        Repo.refe.child(MENU).child(menuItem.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewMenuItemActivity.this);
+        builder.setTitle(getResources().getString(R.string.deleted));
+        builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (isNetworkConnected(AddNewMenuItemActivity.this)) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.deleted), Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Repo.refe.child(MENU).child(menuItem.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (isNetworkConnected(AddNewMenuItemActivity.this)) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.deleted), Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
-                }
+                });
+            }
+        }).setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
             }
         });
+        builder.show();
     }
 
     @Override
