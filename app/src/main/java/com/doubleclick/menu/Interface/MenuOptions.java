@@ -11,4 +11,6 @@ public interface MenuOptions {
 
     void UpdateMenu(MenuItem menuItem);
 
+    void onRowMoved(int fromPosition, int toPosition);
+
 }

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -38,6 +39,7 @@ import com.doubleclick.menu.Adapter.MenuAdapter;
 import com.doubleclick.menu.Interface.MenuOptions;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.Repo;
+import com.doubleclick.menu.Service.ItemMoveCallback;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView;
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener;
@@ -77,6 +79,10 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         menu_items = findViewById(R.id.menu_items);
         menuAdapter = new MenuAdapter(menuItems, AddNewMenuItemActivity.this);
         menu_items.setAdapter(menuAdapter);
+        ItemTouchHelper.Callback callback = new ItemMoveCallback(menuAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(menu_items);
+
         menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         menuViewModel.MenuOperators();
         menuViewModel.MenuItemAdd().observe(this, menuItem -> {
@@ -134,13 +140,6 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
 
     }
 
-    private void updateIndex(int index) {
-        HashMap<String, Object> map = new HashMap<>();
-//        for (int i = 0; i < menuItems.size(); i++) {
-        map.put("index", index);
-        Repo.refe.child(MENU).child(menuItems.get(index).getId()).updateChildren(map);
-//        }
-    }
 
     public void openImage() {
         Intent intent = new Intent();
@@ -234,6 +233,23 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         builder.setView(v);
         builder.setCancelable(true);
         builder.show();
+    }
+
+    @Override
+    public void onRowMoved(int fromPosition, int toPosition) {
+        try {
+            Log.e(TAG, "onRowMoved: " + fromPosition + " => " + toPosition);
+            HashMap<String, Object> maptoPosition = new HashMap<>();
+            maptoPosition.put("index", toPosition);
+            HashMap<String, Object> mapfromPosition = new HashMap<>();
+            mapfromPosition.put("index", fromPosition);
+            Repo.refe.child(MENU).child(menuItems.get(fromPosition).getId()).updateChildren(mapfromPosition);
+            Repo.refe.child(MENU).child(menuItems.get(toPosition).getId()).updateChildren(maptoPosition);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
+
+
     }
 
     public void editDish(Uri uri, String name, String id, AlertDialog.Builder builder) {

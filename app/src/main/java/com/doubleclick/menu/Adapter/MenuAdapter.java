@@ -1,9 +1,11 @@
 package com.doubleclick.menu.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,15 +15,17 @@ import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Interface.MenuOptions;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.R;
+import com.doubleclick.menu.Service.ItemMoveCallback;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created By Eslam Ghazy on 9/22/2022
  */
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder> {
+public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private MenuOptions menuOptions;
 
@@ -41,16 +45,23 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         holder.name.setText(menuItems.get(position).getName());
         Glide.with(holder.itemView.getContext()).load(menuItems.get(position).getImage()).into(holder.image);
-        holder.delete.setOnClickListener(view -> {
-            menuOptions.deleteMenu(menuItems.get(position));
+        holder.option.setOnClickListener(view -> {
+            PopupMenu menu = new PopupMenu(holder.itemView.getContext(), view);
+            menu.getMenuInflater().inflate(R.menu.menu, menu.getMenu());
+            menu.setOnMenuItemClickListener(menuItem -> {
+                if (menuItem.getItemId() == R.id.edit) {
+                    menuOptions.UpdateMenu(menuItems.get(holder.getAdapterPosition()));
+                    return true;
+                } else if (menuItem.getItemId() == R.id.delete) {
+                    menuOptions.deleteMenu(menuItems.get(holder.getAdapterPosition()));
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            menu.show();
         });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                menuOptions.UpdateMenu(menuItems.get(holder.getAdapterPosition()));
-                return true;
-            }
-        });
+
 
     }
 
@@ -59,16 +70,42 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.UserViewHolder
         return menuItems.size();
     }
 
+    @Override
+    public void onRowMoved(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(menuItems, i, i + 1);
+                menuOptions.onRowMoved(fromPosition, toPosition);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(menuItems, i, i - 1);
+                menuOptions.onRowMoved(fromPosition, toPosition);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onRowSelected(UserViewHolder myViewHolder) {
+        myViewHolder.itemView.setBackgroundColor(Color.GRAY);
+    }
+
+    @Override
+    public void onRowClear(UserViewHolder myViewHolder) {
+        myViewHolder.itemView.setBackgroundColor(Color.WHITE);
+    }
+
     public class UserViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView image;
         private TextView name;
-        private ImageView delete;
+        private ImageView option;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
-            delete = itemView.findViewById(R.id.delete);
+            option = itemView.findViewById(R.id.option);
         }
     }
 }
