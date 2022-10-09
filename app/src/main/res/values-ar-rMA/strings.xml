@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">قائمه الطعام</string>
+    <string name="app_name">Coin chaud</string>
     <string name="sign_in">تسجيل دخول</string>
     <string name="sign_up">مستخدم جديد</string>
     <string name="name">الاسم</string>

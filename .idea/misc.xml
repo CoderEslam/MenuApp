@@ -16,7 +16,7 @@
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_new_menu_item.xml" value="0.14" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_add_person.xml" value="0.12" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_food.xml" value="0.18" />
-        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_main.xml" value="0.14" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_menu.xml" value="0.18" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_profile.xml" value="0.22" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/activity_see_menu.xml" value="0.142578125" />
@@ -36,6 +36,7 @@
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/layout/spinner_item.xml" value="0.12" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/menu/menu.xml" value="0.16" />
         <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/mipmap-anydpi-v26/img_round.xml" value="0.197" />
+        <entry key="..\:/Users/eslam/AndroidStudioProjects/Eslam/Kotlin/Menu/app/src/main/res/mipmap-anydpi-v26/logo.xml" value="0.171" />
         <entry key="..\:/Users/eslam/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.142578125" />
         <entry key="..\:/Users/eslam/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_item.xml" value="0.142578125" />
       </map>
