@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         authStateListener = firebaseAuth -> {
             if (user != null) {
                 startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                finish();
             }
         };
     }

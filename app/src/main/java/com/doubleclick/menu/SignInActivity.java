@@ -47,6 +47,7 @@ public class SignInActivity extends AppCompatActivity {
         authStateListener = firebaseAuth -> {
             if (user != null) {
                 startActivity(new Intent(SignInActivity.this, MenuActivity.class));
+                finish();
             }
         };
 
@@ -54,7 +55,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void LogIn(String email, String password) {
-
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

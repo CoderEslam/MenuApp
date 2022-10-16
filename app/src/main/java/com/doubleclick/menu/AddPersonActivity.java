@@ -195,6 +195,9 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
                             email.setText("");
                             password.setText("");
                             roleSelected = "";
+                            Repo.auth.signOut();
+                            startActivity(new Intent(AddPersonActivity.this, MainActivity.class));
+                            finish();
                         }
                     });
                     pd.dismiss();
