@@ -6,6 +6,7 @@ import static com.doubleclick.menu.Model.Constant.USER;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -70,10 +71,12 @@ public class ProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout);
         adding = findViewById(R.id.adding);
         divider1 = findViewById(R.id.divider1);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.profile_details));
+        setSupportActionBar(toolbar);
 
 
         back.setOnClickListener(view -> {
-            startActivity(new Intent(this, MenuActivity.class));
             finish();
         });
         see_menu.setOnClickListener(view -> {
@@ -81,9 +84,12 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         logout.setOnClickListener(view -> {
-            Repo.auth.signOut();
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            if (Repo.user != null) {
+                Repo.auth.signOut();
+                Repo.user = null;
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
         });
 
 
@@ -92,15 +98,21 @@ public class ProfileActivity extends AppCompatActivity {
             editFragment.show(getSupportFragmentManager(), "Edit");
         });
         add_person.setOnClickListener(view -> {
-            startActivity(new Intent(this, AddPersonActivity.class));
+            if (Repo.user != null) {
+                startActivity(new Intent(this, AddPersonActivity.class));
+            }
         });
 
         add_new_dish.setOnClickListener(view -> {
-            startActivity(new Intent(this, AddNewDishActivity.class));
+            if (Repo.user != null) {
+                startActivity(new Intent(this, AddNewDishActivity.class));
+            }
         });
 
         add_menu_item.setOnClickListener(view -> {
-            startActivity(new Intent(this, AddNewMenuItemActivity.class));
+            if (Repo.user != null) {
+                startActivity(new Intent(this, AddNewMenuItemActivity.class));
+            }
         });
 
 
@@ -113,16 +125,18 @@ public class ProfileActivity extends AppCompatActivity {
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if (user.getRole().equals("Manger") || user.getRole().equals("مدير") || user.getRole().equals("Deshabilitar")) {
-                    adding.setVisibility(View.VISIBLE);
-                    divider1.setVisibility(View.VISIBLE);
-                } else {
-                    adding.setVisibility(View.GONE);
-                    divider1.setVisibility(View.GONE);
+                if (Repo.user != null) {
+                    if (user.getRole().equals("Manger") || user.getRole().equals("مدير") || user.getRole().equals("Deshabilitar")) {
+                        adding.setVisibility(View.VISIBLE);
+                        divider1.setVisibility(View.VISIBLE);
+                    } else {
+                        adding.setVisibility(View.GONE);
+                        divider1.setVisibility(View.GONE);
+                    }
+                    username_tv.setText(user.getName());
+                    email_tv.setText(user.getEmail());
+                    Glide.with(ProfileActivity.this).load(user.getImage()).into(app_bar_image);
                 }
-                username_tv.setText(user.getName());
-                email_tv.setText(user.getEmail());
-                Glide.with(ProfileActivity.this).load(user.getImage()).into(app_bar_image);
             }
         });
     }
@@ -168,5 +182,11 @@ public class ProfileActivity extends AppCompatActivity {
             app_bar_image.setImageURI(uri);
             uploadImage();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

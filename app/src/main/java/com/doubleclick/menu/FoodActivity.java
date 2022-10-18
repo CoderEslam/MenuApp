@@ -3,6 +3,7 @@ package com.doubleclick.menu;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,9 +52,13 @@ public class FoodActivity extends AppCompatActivity {
                 number.setText(String.valueOf(quntity));
                 total_price.setText(String.valueOf(quntity * food.getPrice()));
             }
-
         });
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

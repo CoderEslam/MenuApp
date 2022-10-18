@@ -38,6 +38,7 @@
     <string name="no_internet">Sin conexión a Internet</string>
     <string name="see_menu">Ver Menú</string>
     <string name="no">No</string>
+    <string name="sign_in_frist">you have sign in first</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>

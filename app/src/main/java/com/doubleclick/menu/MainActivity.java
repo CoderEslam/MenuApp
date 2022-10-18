@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.doubleclick.menu.Repository.Repo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, SignInActivity.class));
         });
 
+
         authStateListener = firebaseAuth -> {
             if (user != null) {
                 startActivity(new Intent(MainActivity.this, MenuActivity.class));
@@ -48,5 +50,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         auth.removeAuthStateListener(authStateListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (Repo.user == null) {
+            finish();
+        }
     }
 }

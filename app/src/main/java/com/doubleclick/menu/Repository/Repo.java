@@ -1,6 +1,7 @@
 package com.doubleclick.menu.Repository;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -12,8 +13,9 @@ import java.util.Objects;
 public class Repo {
 
     public static final DatabaseReference refe = FirebaseDatabase.getInstance().getReference();
-    public static final String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid().toString();
-    public static final FirebaseAuth auth = FirebaseAuth.getInstance();
+    public static FirebaseAuth auth = FirebaseAuth.getInstance();
+    public static FirebaseUser user = auth.getCurrentUser();
+    public static final String uid = Objects.requireNonNull(user).getUid();
 
 
 }

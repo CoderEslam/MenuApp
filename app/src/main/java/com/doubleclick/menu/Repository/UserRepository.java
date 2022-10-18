@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class UserRepository extends Repo {
 
     private UserInterface userInterface;
-    private ArrayList<User> users = new ArrayList<>();
     private static final String TAG = "UserRepository";
 
     public UserRepository(UserInterface userInterface) {

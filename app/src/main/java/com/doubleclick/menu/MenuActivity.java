@@ -77,7 +77,13 @@ public class MenuActivity extends AppCompatActivity {
 
 
         image_profile.setOnClickListener(view -> {
-            startActivity(new Intent(this, ProfileActivity.class));
+            if (Repo.user != null) {
+                startActivity(new Intent(this, ProfileActivity.class));
+            } else {
+                Toast.makeText(MenuActivity.this, getResources().getString(R.string.sign_in_frist), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MenuActivity.this, MainActivity.class));
+                finish();
+            }
         });
 
         foodViewModel.FoodItemAll().observe(this, new Observer<ArrayList<MenuFoods>>() {
@@ -91,6 +97,5 @@ public class MenuActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-
     }
 }

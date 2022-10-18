@@ -64,6 +64,7 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
     private List<String> optionRole;
     private String roleSelected = "";
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,29 +83,20 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
         allPerson.setAdapter(userAdapter);
 
 
-        userViewModel.userAdd().observe(this, new Observer<User>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(User user) {
-                if (!users.contains(user)) {
-                    users.add(user);
-                    userAdapter.notifyItemInserted(users.size() - 1);
-                    userAdapter.notifyDataSetChanged();
-                }
+        userViewModel.userAdd().observe(this, user -> {
+            if (!users.contains(user)) {
+                users.add(user);
+                userAdapter.notifyItemInserted(users.size() - 1);
+                userAdapter.notifyDataSetChanged();
             }
         });
 
-        userViewModel.userUpdate().observe(this, new Observer<User>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(User user) {
-                Log.e(TAG, "onChanged: " + user.getRole());
-                int pos = users.indexOf(user);
-                users.set(pos, user);
-                userAdapter.notifyItemChanged(pos);
-                userAdapter.notifyDataSetChanged();
+        userViewModel.userUpdate().observe(this, user -> {
+            int pos = users.indexOf(user);
+            users.set(pos, user);
+            userAdapter.notifyItemChanged(pos);
+            userAdapter.notifyDataSetChanged();
 
-            }
         });
 
         register.setOnClickListener(view -> {
@@ -195,8 +187,11 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
                             email.setText("");
                             password.setText("");
                             roleSelected = "";
+                            Toast.makeText(AddPersonActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                             Repo.auth.signOut();
                             startActivity(new Intent(AddPersonActivity.this, MainActivity.class));
+                            Repo.auth = null;
+                            Repo.user = null;
                             finish();
                         }
                     });
@@ -215,4 +210,9 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

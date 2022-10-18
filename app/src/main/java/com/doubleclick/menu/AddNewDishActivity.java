@@ -277,4 +277,10 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         builder.setCancelable(true);
         builder.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

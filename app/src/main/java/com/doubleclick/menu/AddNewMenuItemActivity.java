@@ -302,4 +302,9 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             });
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

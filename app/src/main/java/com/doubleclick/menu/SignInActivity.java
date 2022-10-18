@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +29,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Button login;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,14 @@ public class SignInActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         login = findViewById(R.id.login);
+        progressBar = findViewById(R.id.progressBar);
 
         login.setOnClickListener(view -> {
             if (Check()) {
                 LogIn(Objects.requireNonNull(email.getText()).toString().trim(), Objects.requireNonNull(password.getText()).toString().trim());
+                login.setEnabled(false);
+                login.setTextColor(getResources().getColor(R.color.gray));
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -48,6 +55,7 @@ public class SignInActivity extends AppCompatActivity {
             if (user != null) {
                 startActivity(new Intent(SignInActivity.this, MenuActivity.class));
                 finish();
+                progressBar.setVisibility(View.GONE);
             }
         };
 
@@ -60,6 +68,8 @@ public class SignInActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     startActivity(new Intent(SignInActivity.this, MenuActivity.class));
+                    finish();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -67,7 +77,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private boolean Check() {
-        if (email.getText().toString().equals("") && email.getText().toString().equals("")) {
+        if (Objects.requireNonNull(email.getText()).toString().equals("") && Objects.requireNonNull(password.getText()).toString().equals("")) {
             email.setError(getResources().getString(R.string.input_email));
             password.setError(getResources().getString(R.string.input_password));
             return false;

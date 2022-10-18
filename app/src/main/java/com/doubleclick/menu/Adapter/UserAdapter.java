@@ -75,7 +75,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-//                holder.spinner.setSelection(1);
+
             }
         });
         ArrayAdapter<String> aa = new ArrayAdapter<String>(holder.itemView.getContext(), android.R.layout.simple_spinner_item, optionRole);
