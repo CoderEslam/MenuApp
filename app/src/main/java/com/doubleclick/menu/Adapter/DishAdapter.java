@@ -68,8 +68,8 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     public class DishViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView image;
-        private TextView name, vip;
-        private ImageView delete;
+        private TextView name;
+        private ImageView delete, vip;
 
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);

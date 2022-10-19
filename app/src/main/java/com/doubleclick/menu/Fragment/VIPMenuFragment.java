@@ -2,20 +2,33 @@ package com.doubleclick.menu.Fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.doubleclick.menu.Adapter.LeftSideMenu;
+import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
+import com.doubleclick.menu.Repository.FoodRepository;
+import com.doubleclick.menu.ViewModel.FoodViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link VIPMenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VIPMenuFragment extends Fragment {
+public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +38,10 @@ public class VIPMenuFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private FoodViewModel foodViewModel;
+    private RecyclerView recyclerLeftSide_vip;
+    private FragmentContainerView container_vip;
+    private static final String TAG = "VIPMenuFragment";
 
     public VIPMenuFragment() {
         // Required empty public constructor
@@ -62,5 +79,26 @@ public class VIPMenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_v_i_p_menu, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerLeftSide_vip = view.findViewById(R.id.recyclerLeftSide_vip);
+        container_vip = view.findViewById(R.id.container_vip);
+        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
+        foodViewModel.FoodItemAllVIP().observe(getViewLifecycleOwner(), menuFoods -> {
+            recyclerLeftSide_vip.setAdapter(new LeftSideMenu(menuFoods, this));
+        });
+    }
+
+    @Override
+    public void MenuFoods(MenuFoods foods) {
+        PageFragment pageFragment = new PageFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("array", foods.getFood());
+        bundle.putString("image", foods.getMenuItem().getImage());
+        pageFragment.setArguments(bundle);
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(container_vip.getId(), pageFragment).commit();
     }
 }

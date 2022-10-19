@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.doubleclick.menu.Adapter.LeftSideMenu;
 import com.doubleclick.menu.MenuActivity;
 import com.doubleclick.menu.Model.Food;
+import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
 
@@ -36,7 +37,7 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
     // TODO: Rename and change types of parameters
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide;
-    private FragmentContainerView container;
+    private FragmentContainerView container_normal;
 
     public NormalMenuFragment() {
         // Required empty public constructor
@@ -77,18 +78,20 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         super.onViewCreated(view, savedInstanceState);
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         recyclerLeftSide = view.findViewById(R.id.recyclerLeftSide);
-        container = view.findViewById(R.id.container);
+        container_normal = view.findViewById(R.id.container_normal);
         foodViewModel.FoodItemAll().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide.setAdapter(new LeftSideMenu(menuFoods, this));
         });
     }
 
+
     @Override
-    public void MenuFoods(ArrayList<Food> foods) {
+    public void MenuFoods(MenuFoods foods) {
         PageFragment pageFragment = new PageFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("array", foods);
+        bundle.putParcelableArrayList("array", foods.getFood());
+        bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(container.getId(), pageFragment).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(container_normal.getId(), pageFragment).commit();
     }
 }

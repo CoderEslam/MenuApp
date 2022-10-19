@@ -17,6 +17,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,9 +42,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.iceteck.silicompressorr.SiliCompressor;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class AddNewDishActivity extends AppCompatActivity implements FoodOptions {
@@ -58,7 +63,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     private String menuOptionItemSelected = "";
     private ArrayList<Food> foods = new ArrayList<>();
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
-    private String[] menuOption;
+    private List<String> menuOption;
     private DishAdapter dishAdapter;
     private static final String TAG = "AddNewDishActivity";
 
@@ -80,7 +85,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         FoodViewModel foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         foodViewModel.MenuOperators();
         MenuViewModel menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
-        menuOption = getResources().getStringArray(R.array.menu_option);
+        menuOption = Arrays.asList(getResources().getStringArray(R.array.menu_option));
         menuViewModel.MenuItemAll().observe(this, menuItems -> {
             this.menuItems = menuItems;
             ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
@@ -106,7 +111,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         spinnerClassification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                menuOptionItemSelected = menuOption[i];
+                menuOptionItemSelected = menuOption.get(i);
             }
 
             @Override
@@ -236,7 +241,14 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uri = data.getData();
+            String filePath = SiliCompressor.with(AddNewDishActivity.this).compress(
+                    data.getData().toString(),
+                    new File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                    .toString() + "/Menu/Images/"
+                    )
+            );
+            uri = Uri.parse(filePath);
             image.setImageURI(uri);
         }
     }
@@ -269,6 +281,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         details.setText(food.getDetails());
         price_food.setText(String.valueOf(food.getPrice()));
         spinnerMenu.setSelection(menuItems.indexOf(new MenuItem(food.getIdMenu())));
+        spinnerClassification.setSelection(menuOption.indexOf(food.getClassification()));
         Log.e(TAG, "UpdateFood: " + menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu()))).Menu());
         ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -290,12 +303,12 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         spinnerClassification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                menuOptionItemSelected = menuOption[i];
+                menuOptionItemSelected = menuOption.get(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                spinnerClassification.setSelection(menuOption.indexOf(food.getClassification()));
             }
         });
         Button edit = v.findViewById(R.id.edit);

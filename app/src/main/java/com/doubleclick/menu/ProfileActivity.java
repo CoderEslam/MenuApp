@@ -16,6 +16,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -37,7 +38,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.SiliCompressor;
 
+import java.io.File;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -135,7 +138,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     username_tv.setText(user.getName());
                     email_tv.setText(user.getEmail());
-                    Glide.with(ProfileActivity.this).load(user.getImage()).into(app_bar_image);
+                    Glide.with(ProfileActivity.this).load(user.getImage()).placeholder(R.drawable.person).into(app_bar_image);
                 }
             }
         });
@@ -178,7 +181,14 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uri = data.getData();
+            String filePath = SiliCompressor.with(ProfileActivity.this).compress(
+                    data.getData().toString(),
+                    new File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                    .toString() + "/Menu/Images/"
+                    )
+            );
+            uri = Uri.parse(filePath);
             app_bar_image.setImageURI(uri);
             uploadImage();
         }

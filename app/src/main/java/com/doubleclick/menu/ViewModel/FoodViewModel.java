@@ -25,6 +25,7 @@ public class FoodViewModel extends ViewModel implements FoodInterface {
     private MutableLiveData<Food> foodItemUpdate = new MutableLiveData<>();
     private MutableLiveData<Food> foodItemDelete = new MutableLiveData<>();
     private MutableLiveData<ArrayList<MenuFoods>> foodItemAll = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<MenuFoods>> foodItemAllVIP = new MutableLiveData<>();
 
     FoodRepository foodRepository = new FoodRepository(this);
 
@@ -42,6 +43,10 @@ public class FoodViewModel extends ViewModel implements FoodInterface {
 
     public LiveData<ArrayList<MenuFoods>> FoodItemAll() {
         return foodItemAll;
+    }
+
+    public LiveData<ArrayList<MenuFoods>> FoodItemAllVIP() {
+        return foodItemAllVIP;
     }
 
     public LiveData<Food> FoodItemUpdate() {
@@ -71,5 +76,10 @@ public class FoodViewModel extends ViewModel implements FoodInterface {
     @Override
     public void AllFoodsItem(ArrayList<MenuFoods> foods) {
         foodItemAll.setValue(foods);
+    }
+
+    @Override
+    public void AllFoodsItemVIP(ArrayList<MenuFoods> foods) {
+        foodItemAllVIP.setValue(foods);
     }
 }

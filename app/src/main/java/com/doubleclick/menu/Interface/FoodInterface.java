@@ -21,4 +21,6 @@ public interface FoodInterface {
 
     void AllFoodsItem(ArrayList<MenuFoods> foods);
 
+    void AllFoodsItemVIP(ArrayList<MenuFoods> foods);
+
 }

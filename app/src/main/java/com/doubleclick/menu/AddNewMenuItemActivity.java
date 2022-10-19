@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.iceteck.silicompressorr.SiliCompressor;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -152,7 +155,14 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uri = data.getData();
+            String filePath = SiliCompressor.with(AddNewMenuItemActivity.this).compress(
+                    data.getData().toString(),
+                    new File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                    .toString() + "/Menu/Images/"
+                    )
+            );
+            uri = Uri.parse(filePath);
             image.setImageURI(uri);
         }
     }
@@ -302,6 +312,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             });
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

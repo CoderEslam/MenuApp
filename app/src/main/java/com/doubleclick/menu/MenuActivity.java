@@ -1,6 +1,7 @@
 package com.doubleclick.menu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,10 +16,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Adapter.ViewPagerAdapter;
 import com.doubleclick.menu.Fragment.NormalMenuFragment;
+import com.doubleclick.menu.Fragment.PageFragment;
 import com.doubleclick.menu.Fragment.VIPMenuFragment;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.UserViewModel;
 import com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView;
+import com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView;
 import com.doubleclick.menu.Views.bubblenavigation.listener.BubbleNavigationChangeListener;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -32,10 +35,11 @@ public class MenuActivity extends AppCompatActivity {
 
     private CircleImageView image_profile;
     private TextView name;
-    private ViewPager viewPager;
+//    private ViewPager viewPager;
     //    private SmartTabLayout viewPagerTab;
     private UserViewModel userViewModel;
     private static final String TAG = "MenuActivity";
+    private FragmentContainerView container_menu;
     private BubbleNavigationConstraintView floating_top_bar_navigation;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -45,7 +49,8 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         image_profile = findViewById(R.id.image_profile);
         name = findViewById(R.id.name);
-        viewPager = findViewById(R.id.viewpager);
+        container_menu = findViewById(R.id.container_menu);
+//        viewPager = findViewById(R.id.viewPager);
 //        viewPagerTab = findViewById(R.id.viewpagertab);
         floating_top_bar_navigation = findViewById(R.id.floating_top_bar_navigation);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -67,28 +72,35 @@ public class MenuActivity extends AppCompatActivity {
                 Glide.with(MenuActivity.this).load(user.getImage()).into(image_profile);
             }
         });
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), 2));
-        viewPager.setOnTouchListener((view, motionEvent) -> false);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                floating_top_bar_navigation.setCurrentActiveItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 2);
+//        viewPager.setAdapter(viewPagerAdapter);
+//        viewPager.setOnTouchListener((view, motionEvent) -> false);
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                floating_top_bar_navigation.setCurrentActiveItem(position);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+        getSupportFragmentManager().beginTransaction().replace(container_menu.getId(), new NormalMenuFragment()).commit();
         floating_top_bar_navigation.setNavigationChangeListener(new BubbleNavigationChangeListener() {
             @Override
             public void onNavigationChanged(View view, int position) {
-                viewPager.setCurrentItem(position, true);
+//                viewPager.setCurrentItem(position, true);
+                if (position == 0) {
+                    getSupportFragmentManager().beginTransaction().replace(container_menu.getId(), new NormalMenuFragment()).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(container_menu.getId(), new VIPMenuFragment()).commit();
+                }
             }
         });
 

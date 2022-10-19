@@ -53,12 +53,12 @@ public class LeftSideMenu extends RecyclerView.Adapter<LeftSideMenu.LeftSideView
         Glide.with(holder.itemView.getContext()).load(menuFoods.get(holder.getAbsoluteAdapterPosition()).getMenuItem().getImage()).into(holder.image);
         holder.name.setText(menuFoods.get(holder.getAbsoluteAdapterPosition()).getMenuItem().getName());
         try {
-            leftMenuInterface.MenuFoods(menuFoods.get(0).getFood());
+            leftMenuInterface.MenuFoods(menuFoods.get(0));
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.e(TAG, "onBindViewHolder: " + e.getMessage());
         }
         holder.itemView.setOnClickListener(view -> {
-            leftMenuInterface.MenuFoods(menuFoods.get(holder.getAbsoluteAdapterPosition()).getFood());
+            leftMenuInterface.MenuFoods(menuFoods.get(holder.getAbsoluteAdapterPosition()));
         });
     }
 
@@ -81,6 +81,6 @@ public class LeftSideMenu extends RecyclerView.Adapter<LeftSideMenu.LeftSideView
 
 
     public interface LeftMenuInterface {
-        void MenuFoods(ArrayList<Food> foods);
+        void MenuFoods(MenuFoods foods);
     }
 }

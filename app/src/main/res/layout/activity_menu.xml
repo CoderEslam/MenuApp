@@ -81,8 +81,8 @@
             app:stl_underlineColor="@color/holo_green"
             app:stl_underlineThickness="0dp" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewpager"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/container_menu"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_below="@id/viewpagertab"
@@ -103,34 +103,46 @@
             android:layout_marginBottom="18dp"
             android:background="@drawable/bd_green"
             android:elevation="8dp"
-            android:padding="16dp"
+            android:padding="8dp"
             app:bnc_mode="packed"
-            app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+            app:layout_constraintBottom_toBottomOf="@+id/container_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+
             <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
-                android:id="@+id/l_item_home"
+                android:id="@+id/l_item_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:bt_active="true"
-                app:bt_colorActive="@color/red_active"
-                app:bt_colorInactive="@color/red_inactive"
-                app:bt_icon="@drawable/icon"
-                app:bt_shape="@drawable/rounded_rect"
-                app:bt_shapeColor="@color/red_bg_light"
-                app:bt_title="@string/vip" />
-
-            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
-                android:id="@+id/l_item_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:bt_colorActive="@color/blue_active"
+                app:bt_colorActive="@color/holo_green"
                 app:bt_colorInactive="@color/blue_inactive"
-                app:bt_icon="@drawable/icon"
+                app:bt_icon="@drawable/groups"
                 app:bt_shape="@drawable/rounded_rect"
                 app:bt_shapeColor="@color/blue_bg_light"
-                app:bt_title="@string/name" />
+                app:bt_title="@string/normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/l_item_vip"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
+                android:id="@+id/l_item_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bt_colorActive="@color/yellow_active"
+                app:bt_colorInactive="@color/orange_active"
+                app:bt_icon="@drawable/crown"
+                app:bt_shape="@drawable/rounded_rect"
+                app:bt_shapeColor="@color/red_active"
+                app:bt_title="@string/vip"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/l_item_normal"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView>
 

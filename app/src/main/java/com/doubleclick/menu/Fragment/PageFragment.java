@@ -98,17 +98,17 @@ public class PageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         foods = view.findViewById(R.id.foods);
         bg_image = view.findViewById(R.id.bg_image);
-        /*Glide.with(requireContext()).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25*//*radius must be 0 < r <= 25*//*));
-            }
-
-            @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-            }
-        });*/
+//        Glide.with(view).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
+//            @Override
+//            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                bg_image.setImageBitmap(blurRenderScript(requireActivity(), resource, 25/*radius must be 0 < r <= 25*/));
+//            }
+//
+//            @Override
+//            public void onLoadCleared(@Nullable Drawable placeholder) {
+//
+//            }
+//        });
         //second parametre is radius
         final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
         foods.setLayoutManager(layoutManager);

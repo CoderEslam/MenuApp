@@ -59,17 +59,14 @@
                 app:layout_constraintStart_toEndOf="@+id/name"
                 app:layout_constraintTop_toTopOf="@+id/name" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/vip"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/bd_green"
                 android:gravity="center"
-                android:text="@string/vip"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="32sp"
+                android:src="@drawable/crown"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/delete"

@@ -96,6 +96,7 @@ public class FoodRepository extends Repo {
                     foods.add(foodObject);
                 }
                 Rearengment();
+                RearengmentVIP();
             }
 
             @Override
@@ -109,13 +110,30 @@ public class FoodRepository extends Repo {
         for (MenuItem menuItem : menuItems) {
             ArrayList<Food> fods = new ArrayList<>();
             for (Food food : foods) {
-                if (menuItem.getId().equals(food.getIdMenu())) {
+                if (menuItem.getId().equals(food.getIdMenu()) && !food.getClassification().equals("VIP")) {
                     fods.add(food);
                 }
             }
             menuFoods.add(new MenuFoods(fods, menuItem));
         }
         foodInterface.AllFoodsItem(menuFoods);
+    }
+
+
+    public void RearengmentVIP() {
+        ArrayList<MenuFoods> menuFoods = new ArrayList<>();
+        for (MenuItem menuItem : menuItems) {
+            ArrayList<Food> fods = new ArrayList<>();
+            for (Food food : foods) {
+                if (menuItem.getId().equals(food.getIdMenu()) && food.getClassification().equals("VIP")) {
+                    fods.add(food);
+                    Log.e(TAG, "RearengmentVIP: " + food.toString());
+
+                }
+            }
+            menuFoods.add(new MenuFoods(fods, menuItem));
+        }
+        foodInterface.AllFoodsItemVIP(menuFoods);
     }
 
 

@@ -42,6 +42,7 @@
     <string name="sign_in_frist">you have sign in first</string>
     <string name="Classification">Classification</string>
     <string name="vip">VIP</string>
+    <string name="normal">Normal</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>
