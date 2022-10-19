@@ -12,12 +12,13 @@
     <string name="password">password</string>
     <string name="login">Login</string>
     <string name="input_email">Input email</string>
+    <string name="input_name">Input name</string>
     <string name="input_password">Input password</string>
     <string name="ingrendiets">Ingredients</string>
     <string name="details">Details</string>
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_new_dish">Add New Dish</string>
-    <string name="add_new_person">Add New Person</string>
+    <string name="add_new_person">Manage Users</string>
     <string name="upload">Upload</string>
     <string name="deleted">Deleted</string>
     <string name="edit">Edit</string>
@@ -39,9 +40,17 @@
     <string name="see_menu">See Menu</string>
     <string name="no">No</string>
     <string name="sign_in_frist">you have sign in first</string>
+    <string name="Classification">Classification</string>
+    <string name="vip">VIP</string>
     <string-array name="user_option">
         <item>Manger</item>
         <item>Waiter</item>
         <item>Disable</item>
     </string-array>
+    <string-array name="menu_option">
+        <item>VIP</item>
+        <item>Normal</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

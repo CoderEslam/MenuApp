@@ -28,6 +28,9 @@ import com.bumptech.glide.request.transition.Transition;
 import com.doubleclick.menu.Adapter.FoodAdapter;
 import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.R;
+import com.doubleclick.menu.Views.carousellayoutmanager.CarouselLayoutManager;
+import com.doubleclick.menu.Views.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.doubleclick.menu.Views.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
 
@@ -95,19 +98,23 @@ public class PageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         foods = view.findViewById(R.id.foods);
         bg_image = view.findViewById(R.id.bg_image);
-        Glide.with(requireContext()).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
+        /*Glide.with(requireContext()).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25/*radius must be 0 < r <= 25*/));
+                bg_image.setImageBitmap(blurRenderScript(requireContext(), resource, 25*//*radius must be 0 < r <= 25*//*));
             }
 
             @Override
             public void onLoadCleared(@Nullable Drawable placeholder) {
 
             }
-        });
+        });*/
         //second parametre is radius
-
+        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        foods.setLayoutManager(layoutManager);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        foods.setHasFixedSize(true);
+        foods.addOnScrollListener(new CenterScrollListener());
         foods.setAdapter(new FoodAdapter(marray));
     }
 

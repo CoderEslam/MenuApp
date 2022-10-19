@@ -56,6 +56,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
+
         <com.ogaclejapan.smarttablayout.SmartTabLayout
             android:id="@+id/viewpagertab"
             android:layout_width="match_parent"
@@ -63,6 +64,7 @@
             android:clipToPadding="false"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,6 +72,7 @@
             app:stl_defaultTabTextHorizontalPadding="18dp"
             app:stl_dividerColor="@color/holo_green"
             app:stl_dividerThickness="0dp"
+            app:stl_indicatorAlwaysInCenter="true"
             app:stl_indicatorColor="@color/holo_green"
             app:stl_indicatorCornerRadius="18dp"
             app:stl_indicatorGravity="center"
@@ -85,9 +88,51 @@
             android:layout_below="@id/viewpagertab"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewpagertab" />
+            app:layout_constraintTop_toBottomOf="@+id/viewpagertab"
+            app:layout_constraintVertical_bias="0.0" />
 
+
+        <com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView
+            android:id="@+id/floating_top_bar_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bd_green"
+            android:elevation="8dp"
+            android:padding="16dp"
+            app:bnc_mode="packed"
+            app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
+                android:id="@+id/l_item_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bt_active="true"
+                app:bt_colorActive="@color/red_active"
+                app:bt_colorInactive="@color/red_inactive"
+                app:bt_icon="@drawable/icon"
+                app:bt_shape="@drawable/rounded_rect"
+                app:bt_shapeColor="@color/red_bg_light"
+                app:bt_title="@string/vip" />
+
+            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
+                android:id="@+id/l_item_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bt_colorActive="@color/blue_active"
+                app:bt_colorInactive="@color/blue_inactive"
+                app:bt_icon="@drawable/icon"
+                app:bt_shape="@drawable/rounded_rect"
+                app:bt_shapeColor="@color/blue_bg_light"
+                app:bt_title="@string/name" />
+
+        </com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

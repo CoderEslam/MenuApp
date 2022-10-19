@@ -47,6 +47,11 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         holder.delete.setOnClickListener(view -> {
             foodOptions.deleteFood(foods.get(holder.getAdapterPosition()));
         });
+        if (foods.get(holder.getBindingAdapterPosition()).getClassification().equals("VIP")) {
+            holder.vip.setVisibility(View.VISIBLE);
+        } else {
+            holder.vip.setVisibility(View.GONE);
+        }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -63,7 +68,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     public class DishViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView image;
-        private TextView name;
+        private TextView name, vip;
         private ImageView delete;
 
         public DishViewHolder(@NonNull View itemView) {
@@ -71,6 +76,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.name);
             delete = itemView.findViewById(R.id.delete);
+            vip = itemView.findViewById(R.id.vip);
 
         }
     }

@@ -11,6 +11,8 @@ import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.FoodRepository;
 import com.doubleclick.menu.Repository.MenuRepository;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,6 @@ public class FoodViewModel extends ViewModel implements FoodInterface {
     private MutableLiveData<Food> foodItemUpdate = new MutableLiveData<>();
     private MutableLiveData<Food> foodItemDelete = new MutableLiveData<>();
     private MutableLiveData<ArrayList<MenuFoods>> foodItemAll = new MutableLiveData<>();
-
 
     FoodRepository foodRepository = new FoodRepository(this);
 

@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.sign_up).setOnClickListener(view -> {
-            startActivity(new Intent(this, SignInActivity.class));
+            startActivity(new Intent(this, SignUpActivity.class));
         });
 
 

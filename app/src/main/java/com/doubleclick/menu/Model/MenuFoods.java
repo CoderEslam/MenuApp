@@ -10,6 +10,7 @@ public class MenuFoods {
 
     private MenuItem menuItem;
     private ArrayList<Food> food;
+    private int id;
 
 
     public MenuFoods(ArrayList<Food> food, MenuItem menuItem) {
@@ -44,5 +45,13 @@ public class MenuFoods {
     @Override
     public int hashCode() {
         return Objects.hash(getMenuItem(), getFood());
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

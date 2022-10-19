@@ -1,5 +1,6 @@
 package com.doubleclick.menu.Adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ablanco.zoomy.Zoomy;
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.FoodActivity;
 import com.doubleclick.menu.Model.Food;
@@ -46,10 +48,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         holder.name_food.setText(foods.get(holder.getAdapterPosition()).getName());
         holder.price_food.setText(String.valueOf(foods.get(holder.getAdapterPosition()).getPrice()));
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(holder.itemView.getContext(), FoodActivity.class);
-            intent.putExtra("food", foods.get(holder.getAdapterPosition()));
-            holder.itemView.getContext().startActivity(intent);
+//            Intent intent = new Intent(holder.itemView.getContext(), FoodActivity.class);
+//            intent.putExtra("food", foods.get(holder.getAdapterPosition()));
+//            holder.itemView.getContext().startActivity(intent);
         });
+        Zoomy.Builder builder = new Zoomy.Builder((Activity) holder.itemView.getContext()).target(holder.img_food);
+        builder.register();
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

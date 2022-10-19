@@ -12,12 +12,13 @@
     <string name="password">الرقم السري</string>
     <string name="login">تسجيل دخول</string>
     <string name="input_email">ادخل الاميل</string>
+    <string name="input_name">ادخل الاسم</string>
     <string name="input_password">ادخل الرقم السري</string>
     <string name="ingrendiets">المكونات</string>
     <string name="details">تفاصيل</string>
     <string name="add_menu_item">اضافة قائمه طعام</string>
     <string name="add_new_dish">اضافه طبق جديد</string>
-    <string name="add_new_person">اضافه مستخدم جديد</string>
+    <string name="add_new_person">ادارة المستخدمين</string>
     <string name="upload">تحميل</string>
     <string name="deleted">مسح</string>
     <string name="edit">تعديل</string>
@@ -39,10 +40,17 @@
     <string name="see_menu">رؤيه قائمه الطعام</string>
     <string name="no">لا</string>
     <string name="sign_in_frist">you have sign in first</string>
+    <string name="Classification">Classification</string>
+    <string name="vip">VIP</string>
 
     <string-array name="user_option">
         <item>مدير</item>
         <item>نادل</item>
         <item>ايقاف</item>
+    </string-array>
+
+    <string-array name="menu_option">
+        <item>VIP</item>
+        <item>Normal</item>
     </string-array>
 </resources>

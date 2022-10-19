@@ -1,5 +1,7 @@
 package com.doubleclick.menu;
 
+import static com.doubleclick.menu.Service.Network.isNetworkConnected;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,10 +47,14 @@ public class SignInActivity extends AppCompatActivity {
 
         login.setOnClickListener(view -> {
             if (Check()) {
-                LogIn(Objects.requireNonNull(email.getText()).toString().trim(), Objects.requireNonNull(password.getText()).toString().trim());
-                login.setEnabled(false);
-                login.setTextColor(getResources().getColor(R.color.gray));
-                progressBar.setVisibility(View.VISIBLE);
+                if (isNetworkConnected(SignInActivity.this)) {
+                    LogIn(Objects.requireNonNull(email.getText()).toString().trim(), Objects.requireNonNull(password.getText()).toString().trim());
+                    login.setEnabled(false);
+                    login.setTextColor(getResources().getColor(R.color.gray));
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(SignInActivity.this, getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -107,7 +107,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
-                        android:id="@+id/spinner"
+                        android:id="@+id/spinnerMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -118,6 +118,25 @@
                         app:smsp_floatingLabelColor="@color/green"
                         app:smsp_floatingLabelText="@string/menu"
                         app:smsp_hint="@string/menu"
+                        app:smsp_hintColor="@color/black"
+                        app:smsp_itemColor="@color/black"
+                        app:smsp_itemListColor="@color/white"
+                        app:smsp_itemListHintBackgroundColor="#808080"
+                        app:smsp_itemListHintColor="#FFFFFF"
+                        app:smsp_multilineError="false"
+                        app:smsp_selectedItemListColor="@color/green" />
+
+                    <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                        android:id="@+id/spinnerClassification"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="@+id/spinnerMenu"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/spinnerMenu"
+                        app:layout_constraintTop_toBottomOf="@+id/spinnerMenu"
+                        app:smsp_floatingLabelColor="@color/green"
+                        app:smsp_floatingLabelText="@string/Classification"
+                        app:smsp_hint="@string/Classification"
                         app:smsp_hintColor="@color/black"
                         app:smsp_itemColor="@color/black"
                         app:smsp_itemListColor="@color/white"
@@ -138,9 +157,9 @@
                         android:textColor="@color/white"
                         android:textSize="28sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/spinner"
-                        app:layout_constraintStart_toStartOf="@+id/spinner"
-                        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+                        app:layout_constraintEnd_toEndOf="@+id/spinnerClassification"
+                        app:layout_constraintStart_toStartOf="@+id/spinnerClassification"
+                        app:layout_constraintTop_toBottomOf="@+id/spinnerClassification" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

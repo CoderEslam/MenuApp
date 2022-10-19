@@ -15,6 +15,7 @@ public class Food implements Parcelable {
     private String id;
     private String idMenu;
     private String details;
+    private String classification;
 
     public Food() {
         details = "";
@@ -23,6 +24,7 @@ public class Food implements Parcelable {
         idMenu = "";
         id = "";
         name = "";
+        classification = "";
     }
 
     protected Food(Parcel in) {
@@ -32,6 +34,8 @@ public class Food implements Parcelable {
         id = in.readString();
         idMenu = in.readString();
         details = in.readString();
+        classification = in.readString();
+
     }
 
     public static final Creator<Food> CREATOR = new Creator<Food>() {
@@ -78,6 +82,13 @@ public class Food implements Parcelable {
         this.id = id;
     }
 
+    public String getClassification() {
+        return classification;
+    }
+
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
 
     @Override
     public String toString() {
@@ -119,6 +130,7 @@ public class Food implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(idMenu);
         parcel.writeString(details);
+        parcel.writeString(classification);
     }
 
     @Override
