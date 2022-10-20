@@ -43,6 +43,7 @@
     <string name="Classification">Classification</string>
     <string name="vip">VIP</string>
     <string name="normal">Normal</string>
+    <string name="we_working_on_it">We working on it</string>
 
     <string-array name="user_option">
         <item>مدير</item>

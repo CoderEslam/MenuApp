@@ -53,4 +53,5 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="normal">Normal</string>
+    <string name="we_working_on_it">We working on it</string>
 </resources>

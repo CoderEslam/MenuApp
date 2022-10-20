@@ -21,7 +21,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -31,6 +33,8 @@ import com.doubleclick.menu.R;
 import com.doubleclick.menu.Views.carousellayoutmanager.CarouselLayoutManager;
 import com.doubleclick.menu.Views.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.doubleclick.menu.Views.carousellayoutmanager.CenterScrollListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -51,7 +55,8 @@ public class PageFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mImage;
     private ArrayList<Food> marray;
-
+    private TextView text;
+    private LottieAnimationView animationView;
     private RecyclerView foods;
     private ImageView bg_image;
 
@@ -98,6 +103,15 @@ public class PageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         foods = view.findViewById(R.id.foods);
         bg_image = view.findViewById(R.id.bg_image);
+        text = view.findViewById(R.id.text);
+        animationView = view.findViewById(R.id.animationView);
+        if (marray.isEmpty()) {
+            text.setVisibility(View.VISIBLE);
+            animationView.setVisibility(View.VISIBLE);
+        } else {
+            text.setVisibility(View.GONE);
+            animationView.setVisibility(View.GONE);
+        }
 //        Glide.with(view).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
 //            @Override
 //            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -110,7 +124,7 @@ public class PageFragment extends Fragment {
 //            }
 //        });
         //second parametre is radius
-        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.VERTICAL);
         foods.setLayoutManager(layoutManager);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
         foods.setHasFixedSize(true);
