@@ -3,6 +3,7 @@ package com.doubleclick.menu.Repository;
 import static com.doubleclick.menu.Model.Constant.FOOD;
 import static com.doubleclick.menu.Model.Constant.INDEX;
 import static com.doubleclick.menu.Model.Constant.MENU;
+import static com.doubleclick.menu.Model.Constant.VIP;
 
 import android.util.Log;
 
@@ -39,7 +40,7 @@ public class FoodRepository extends Repo {
 
     public void FoodsOperator() {
         refe.keepSynced(true);
-        refe.child(FOOD).addChildEventListener(new ChildEventListener() {
+        refe.child(FOOD).orderByChild(VIP).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 foodInterface.addFoodItem(snapshot.getValue(Food.class));

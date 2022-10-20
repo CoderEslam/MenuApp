@@ -1,5 +1,6 @@
 package com.doubleclick.menu.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Adapter.LeftSideMenu;
 import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
@@ -41,6 +44,7 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide_vip;
     private FragmentContainerView container_vip;
+    private ImageView image_bg;
     private static final String TAG = "VIPMenuFragment";
 
     public VIPMenuFragment() {
@@ -87,11 +91,13 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         recyclerLeftSide_vip = view.findViewById(R.id.recyclerLeftSide_vip);
         container_vip = view.findViewById(R.id.container_vip);
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
+        image_bg = view.findViewById(R.id.image_bg);
         foodViewModel.FoodItemAllVIP().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide_vip.setAdapter(new LeftSideMenu(menuFoods, this));
         });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void MenuFoods(MenuFoods foods) {
         PageFragment pageFragment = new PageFragment();
@@ -100,5 +106,6 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
         requireActivity().getSupportFragmentManager().beginTransaction().replace(container_vip.getId(), pageFragment).commit();
+        Glide.with(requireActivity()).load(foods.getMenuItem().getImage()).placeholder(getResources().getDrawable(R.drawable.bg_white)).into(image_bg);
     }
 }

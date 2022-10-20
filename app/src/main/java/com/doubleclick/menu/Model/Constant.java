@@ -9,4 +9,5 @@ public class Constant {
     public static final String FOOD = "Food";
     public static final String IMAGES = "Images";
     public static final String INDEX = "index";
+    public static final String VIP = "classification";
 }

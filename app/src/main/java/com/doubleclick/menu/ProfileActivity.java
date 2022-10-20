@@ -1,5 +1,6 @@
 package com.doubleclick.menu;
 
+import static com.doubleclick.menu.App.App.deleteCache;
 import static com.doubleclick.menu.Model.Constant.IMAGES;
 import static com.doubleclick.menu.Model.Constant.USER;
 
@@ -90,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (Repo.user != null) {
                 Repo.auth.signOut();
                 Repo.user = null;
+                deleteCache(ProfileActivity.this);
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
             }

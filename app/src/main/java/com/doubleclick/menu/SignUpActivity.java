@@ -1,5 +1,6 @@
 package com.doubleclick.menu;
 
+import static com.doubleclick.menu.App.App.deleteCache;
 import static com.doubleclick.menu.Model.Constant.USER;
 import static com.doubleclick.menu.Service.Network.isNetworkConnected;
 
@@ -70,6 +71,8 @@ public class SignUpActivity extends AppCompatActivity {
                     TextInputEditTextPassword.setText("");
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(SignUpActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
+                    Repo.auth.signOut();
+                    deleteCache(SignUpActivity.this);
                 });
             }
         });

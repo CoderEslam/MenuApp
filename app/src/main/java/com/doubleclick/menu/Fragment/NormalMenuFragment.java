@@ -1,9 +1,11 @@
 package com.doubleclick.menu.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Adapter.LeftSideMenu;
 import com.doubleclick.menu.MenuActivity;
 import com.doubleclick.menu.Model.Food;
@@ -38,6 +43,7 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide;
     private FragmentContainerView container_normal;
+    private ImageView image_bg;
 
     public NormalMenuFragment() {
         // Required empty public constructor
@@ -79,12 +85,14 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         recyclerLeftSide = view.findViewById(R.id.recyclerLeftSide);
         container_normal = view.findViewById(R.id.container_normal);
+        image_bg = view.findViewById(R.id.image_bg);
         foodViewModel.FoodItemAll().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide.setAdapter(new LeftSideMenu(menuFoods, this));
         });
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void MenuFoods(MenuFoods foods) {
         PageFragment pageFragment = new PageFragment();
@@ -93,5 +101,6 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
         requireActivity().getSupportFragmentManager().beginTransaction().replace(container_normal.getId(), pageFragment).commit();
+        Glide.with(requireActivity()).load(foods.getMenuItem().getImage()).placeholder(getResources().getDrawable(R.drawable.bg_white)).into(image_bg);
     }
 }

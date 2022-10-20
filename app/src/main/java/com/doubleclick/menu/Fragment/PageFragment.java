@@ -112,17 +112,17 @@ public class PageFragment extends Fragment {
             text.setVisibility(View.GONE);
             animationView.setVisibility(View.GONE);
         }
-//        Glide.with(view).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
-//            @Override
-//            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                bg_image.setImageBitmap(blurRenderScript(requireActivity(), resource, 25/*radius must be 0 < r <= 25*/));
-//            }
-//
-//            @Override
-//            public void onLoadCleared(@Nullable Drawable placeholder) {
-//
-//            }
-//        });
+        Glide.with(view).asBitmap().load(mImage).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                bg_image.setImageBitmap(blurRenderScript(requireActivity(), resource, 25/*radius must be 0 < r <= 25*/));
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
         //second parametre is radius
         final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.VERTICAL);
         foods.setLayoutManager(layoutManager);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Interface.FoodOptions;
 import com.doubleclick.menu.Model.Food;
@@ -69,7 +70,8 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     public class DishViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView image;
         private TextView name;
-        private ImageView delete, vip;
+        private ImageView delete;
+        private LottieAnimationView vip;
 
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);
