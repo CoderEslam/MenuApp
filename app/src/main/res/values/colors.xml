@@ -11,6 +11,7 @@
     <color name="gray">#808080</color>
     <color name="holo_green">#77da4d</color>
     <color name="green">#489B37</color>
+    <color name="colorless">#00FFFFFF</color>
     <color name="default_inactive_shape_color">#e5e5e5</color>
     <color name="default_inactive_color">#212121</color>
     <color name="default_shape_inactive_color">#888888</color>
