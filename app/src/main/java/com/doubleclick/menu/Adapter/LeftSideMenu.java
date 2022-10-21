@@ -52,6 +52,7 @@ public class LeftSideMenu extends RecyclerView.Adapter<LeftSideMenu.LeftSideView
     public void onBindViewHolder(@NonNull LeftSideViewHolder holder, int position) {
         Glide.with(holder.itemView.getContext()).load(menuFoods.get(holder.getAbsoluteAdapterPosition()).getMenuItem().getImage()).into(holder.image);
         holder.name.setText(menuFoods.get(holder.getAbsoluteAdapterPosition()).getMenuItem().getName());
+        holder.name.setSelected(true);
         try {
             leftMenuInterface.MenuFoods(menuFoods.get(0));
         } catch (ArrayIndexOutOfBoundsException e) {
