@@ -124,7 +124,7 @@ public class PageFragment extends Fragment {
             }
         });
         //second parametre is radius
-        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.VERTICAL);
+        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
         foods.setLayoutManager(layoutManager);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
         foods.setHasFixedSize(true);

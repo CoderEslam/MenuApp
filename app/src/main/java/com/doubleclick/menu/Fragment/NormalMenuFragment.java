@@ -25,6 +25,8 @@ import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
+import com.doubleclick.menu.Views.flowingdrawer_core.ElasticDrawer;
+import com.doubleclick.menu.Views.flowingdrawer_core.FlowingDrawer;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -43,7 +45,8 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide;
     private FragmentContainerView container_normal;
-    private ImageView image_bg;
+    private ImageView menu;
+    private FlowingDrawer drawerlayout_normal;
 
     public NormalMenuFragment() {
         // Required empty public constructor
@@ -73,8 +76,7 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_normal_menu, container, false);
     }
@@ -85,9 +87,14 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         recyclerLeftSide = view.findViewById(R.id.recyclerLeftSide);
         container_normal = view.findViewById(R.id.container_normal);
-        image_bg = view.findViewById(R.id.image_bg);
+        drawerlayout_normal = view.findViewById(R.id.drawerlayout_normal);
+        drawerlayout_normal.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
+        menu = requireActivity().findViewById(R.id.menu);
         foodViewModel.FoodItemAll().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide.setAdapter(new LeftSideMenu(menuFoods, this));
+        });
+        menu.setOnClickListener(v -> {
+            drawerlayout_normal.toggleMenu();
         });
     }
 
@@ -101,6 +108,6 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
         requireActivity().getSupportFragmentManager().beginTransaction().replace(container_normal.getId(), pageFragment).commit();
-        Glide.with(requireActivity()).load(foods.getMenuItem().getImage()).placeholder(getResources().getDrawable(R.drawable.bg_white)).into(image_bg);
+        drawerlayout_normal.closeMenu();
     }
 }

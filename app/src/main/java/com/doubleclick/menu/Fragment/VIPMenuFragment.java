@@ -23,6 +23,8 @@ import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
 import com.doubleclick.menu.Repository.FoodRepository;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
+import com.doubleclick.menu.Views.flowingdrawer_core.ElasticDrawer;
+import com.doubleclick.menu.Views.flowingdrawer_core.FlowingDrawer;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,8 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide_vip;
     private FragmentContainerView container_vip;
-    private ImageView image_bg;
+    private ImageView menu;
+    private FlowingDrawer drawerlayout_vip;
     private static final String TAG = "VIPMenuFragment";
 
     public VIPMenuFragment() {
@@ -91,9 +94,14 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         recyclerLeftSide_vip = view.findViewById(R.id.recyclerLeftSide_vip);
         container_vip = view.findViewById(R.id.container_vip);
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
-        image_bg = view.findViewById(R.id.image_bg);
+        menu = requireActivity().findViewById(R.id.menu);
+        drawerlayout_vip = view.findViewById(R.id.drawerlayout_vip);
+        drawerlayout_vip.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         foodViewModel.FoodItemAllVIP().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide_vip.setAdapter(new LeftSideMenu(menuFoods, this));
+        });
+        menu.setOnClickListener(v -> {
+            drawerlayout_vip.toggleMenu();
         });
     }
 
@@ -106,6 +114,6 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
         requireActivity().getSupportFragmentManager().beginTransaction().replace(container_vip.getId(), pageFragment).commit();
-        Glide.with(requireActivity()).load(foods.getMenuItem().getImage()).placeholder(getResources().getDrawable(R.drawable.bg_white)).into(image_bg);
+        drawerlayout_vip.closeMenu();
     }
 }
