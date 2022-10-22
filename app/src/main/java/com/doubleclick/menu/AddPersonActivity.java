@@ -80,7 +80,7 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
         register = findViewById(R.id.register);
         image = findViewById(R.id.image);
         optionRole = Arrays.asList(getResources().getStringArray(R.array.user_option));
-        userViewModel = new UserViewModel();
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.getUserOperation();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();

@@ -62,7 +62,7 @@ public class MenuActivity extends AppCompatActivity {
 //        viewPager = findViewById(R.id.viewPager);
 //        viewPagerTab = findViewById(R.id.viewpagertab);
         floating_top_bar_navigation = findViewById(R.id.floating_top_bar_navigation);
-        userViewModel = new UserViewModel();
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 //        FragmentPagerItems.Creator creator = FragmentPagerItems.with(this);
 //        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), creator.create());
 //        creator.add("Normal", NormalMenuFragment.class);

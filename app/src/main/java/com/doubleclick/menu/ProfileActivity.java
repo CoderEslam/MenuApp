@@ -98,7 +98,6 @@ public class ProfileActivity extends AppCompatActivity {
             if (firebaseUser != null) {
                 auth.signOut();
                 userViewModel.getUser().removeObservers(this);
-                deleteCache(ProfileActivity.this);
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
             }
@@ -132,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
             openImage();
         });
 
-        userViewModel = new UserViewModel();
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override

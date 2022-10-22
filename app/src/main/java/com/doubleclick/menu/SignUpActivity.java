@@ -80,7 +80,6 @@ public class SignUpActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(SignUpActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
                     auth.signOut();
-                    deleteCache(SignUpActivity.this);
                 });
             }
         });

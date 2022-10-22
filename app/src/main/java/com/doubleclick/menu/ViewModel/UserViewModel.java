@@ -1,5 +1,7 @@
 package com.doubleclick.menu.ViewModel;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created By Eslam Ghazy on 9/21/2022
  */
-public class UserViewModel  implements UserInterface {
+public class UserViewModel extends ViewModel implements UserInterface {
 
 
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
