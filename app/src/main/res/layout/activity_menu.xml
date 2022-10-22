@@ -120,7 +120,7 @@
             android:elevation="8dp"
             android:padding="8dp"
             app:bnc_mode="packed"
-            app:layout_constraintBottom_toBottomOf="@+id/container_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
