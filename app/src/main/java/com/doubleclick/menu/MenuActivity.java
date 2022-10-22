@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.doubleclick.menu.ViewModel.UserViewModel;
 import com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView;
 import com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView;
 import com.doubleclick.menu.Views.bubblenavigation.listener.BubbleNavigationChangeListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -35,11 +38,13 @@ public class MenuActivity extends AppCompatActivity {
 
     private CircleImageView image_profile;
     private TextView name;
-//    private ViewPager viewPager;
+    //    private ViewPager viewPager;
     //    private SmartTabLayout viewPagerTab;
     private UserViewModel userViewModel;
     private static final String TAG = "MenuActivity";
     private FragmentContainerView container_menu;
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth auth;
     private BubbleNavigationConstraintView floating_top_bar_navigation;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -50,10 +55,14 @@ public class MenuActivity extends AppCompatActivity {
         image_profile = findViewById(R.id.image_profile);
         name = findViewById(R.id.name);
         container_menu = findViewById(R.id.container_menu);
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        Log.e(TAG, "onCreate: " + firebaseUser.getUid());
+
 //        viewPager = findViewById(R.id.viewPager);
 //        viewPagerTab = findViewById(R.id.viewpagertab);
         floating_top_bar_navigation = findViewById(R.id.floating_top_bar_navigation);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new UserViewModel();
 //        FragmentPagerItems.Creator creator = FragmentPagerItems.with(this);
 //        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), creator.create());
 //        creator.add("Normal", NormalMenuFragment.class);
@@ -62,14 +71,14 @@ public class MenuActivity extends AppCompatActivity {
 //        viewPagerTab.setViewPager(viewPager);
 //        adapter.notifyDataSetChanged();
         userViewModel.getUser().observe(this, user -> {
-            if (user != null && Repo.user != null) {
+            if (user != null && firebaseUser != null) {
                 if (user.getRole().equals("Disable") || user.getRole().equals("ايقاف") || user.getRole().equals("Deshabilitar")) {
                     Toast.makeText(MenuActivity.this, getResources().getString(R.string.disable), Toast.LENGTH_SHORT).show();
-                    Repo.auth.signOut();
+                    auth.signOut();
                     startActivity(new Intent(MenuActivity.this, MainActivity.class));
                 }
                 name.setText(user.getName());
-                Glide.with(MenuActivity.this).load(user.getImage()).into(image_profile);
+                Glide.with(MenuActivity.this).load(user.getImage()).placeholder(R.drawable.person).into(image_profile);
             }
         });
 //        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 2);
@@ -97,15 +106,23 @@ public class MenuActivity extends AppCompatActivity {
             public void onNavigationChanged(View view, int position) {
 //                viewPager.setCurrentItem(position, true);
                 if (position == 0) {
-                    getSupportFragmentManager().beginTransaction().replace(container_menu.getId(), new NormalMenuFragment()).commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                            .replace(container_menu.getId(), new NormalMenuFragment())
+                            .commit();
                 } else {
-                    getSupportFragmentManager().beginTransaction().replace(container_menu.getId(), new VIPMenuFragment()).commit();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                            .replace(container_menu.getId(), new VIPMenuFragment())
+                            .commit();
                 }
             }
         });
 
         image_profile.setOnClickListener(view -> {
-            if (Repo.user != null) {
+            if (firebaseUser != null) {
                 startActivity(new Intent(this, ProfileActivity.class));
             } else {
                 Toast.makeText(MenuActivity.this, getResources().getString(R.string.sign_in_frist), Toast.LENGTH_SHORT).show();

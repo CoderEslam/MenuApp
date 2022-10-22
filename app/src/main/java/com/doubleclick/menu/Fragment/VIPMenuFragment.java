@@ -113,7 +113,12 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         bundle.putParcelableArrayList("array", foods.getFood());
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(container_vip.getId(), pageFragment).commit();
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                .replace(container_vip.getId(), pageFragment)
+                .commit();
         drawerlayout_vip.closeMenu();
     }
 }

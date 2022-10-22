@@ -9,12 +9,15 @@ import androidx.annotation.Nullable;
 
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Interface.UserInterface;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created By Eslam Ghazy on 9/21/2022
@@ -23,12 +26,18 @@ public class UserRepository extends Repo {
 
     private UserInterface userInterface;
     private static final String TAG = "UserRepository";
+    private FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
+    private String uid;
 
     public UserRepository(UserInterface userInterface) {
         this.userInterface = userInterface;
     }
 
     public void User() {
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        uid = Objects.requireNonNull(firebaseUser).getUid();
         refe.keepSynced(true);
         refe.child(USER).child(uid).addValueEventListener(new ValueEventListener() {
             @Override

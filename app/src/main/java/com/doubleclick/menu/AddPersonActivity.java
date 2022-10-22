@@ -63,6 +63,9 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
     private Uri uri;
     private List<String> optionRole;
     private String roleSelected = "";
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private String uid;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -77,8 +80,11 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
         register = findViewById(R.id.register);
         image = findViewById(R.id.image);
         optionRole = Arrays.asList(getResources().getStringArray(R.array.user_option));
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new UserViewModel();
         userViewModel.getUserOperation();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        uid = Objects.requireNonNull(user).getUid();
         userAdapter = new UserAdapter(users, AddPersonActivity.this, optionRole);
         allPerson.setAdapter(userAdapter);
 
@@ -125,7 +131,7 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
 
     private void SignUp(String name, String email, String password) {
         if (!name.equals("") && !email.equals("") && !password.equals("") && !uri.toString().equals("") && !roleSelected.equals("")) {
-            Repo.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful() && isNetworkConnected(AddPersonActivity.this)) {
@@ -167,7 +173,7 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
             final ProgressDialog pd = new ProgressDialog(this);
             pd.setMessage("Uploading");
             pd.show();
-            String id = Objects.requireNonNull(Repo.auth.getCurrentUser()).getUid().toString();
+            String id = Objects.requireNonNull(auth.getCurrentUser()).getUid().toString();
             final StorageReference fileReference = FirebaseStorage.getInstance()
                     .getReference(IMAGES).child(id + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
@@ -188,10 +194,8 @@ public class AddPersonActivity extends AppCompatActivity implements UserOptions 
                             password.setText("");
                             roleSelected = "";
                             Toast.makeText(AddPersonActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
-                            Repo.auth.signOut();
+                            auth.signOut();
                             startActivity(new Intent(AddPersonActivity.this, MainActivity.class));
-                            Repo.auth = null;
-                            Repo.user = null;
                             finish();
                         }
                     });

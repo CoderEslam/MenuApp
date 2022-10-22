@@ -11,11 +11,5 @@ import java.util.Objects;
  * Created By Eslam Ghazy on 9/21/2022
  */
 public class Repo {
-
     public static final DatabaseReference refe = FirebaseDatabase.getInstance().getReference();
-    public static FirebaseAuth auth = FirebaseAuth.getInstance();
-    public static FirebaseUser user = auth.getCurrentUser();
-    public static final String uid = Objects.requireNonNull(user).getUid();
-
-
 }

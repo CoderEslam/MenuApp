@@ -63,14 +63,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         holder.name.setText(users.get(position).getName());
-        Glide.with(holder.itemView.getContext()).load(users.get(position).getImage()).into(holder.image);
-        holder.setRole(users.get(holder.getAdapterPosition()).getId());
+        Glide.with(holder.itemView.getContext()).load(users.get(position).getImage()).placeholder(R.drawable.person).into(holder.image);
+        holder.setRole(users.get(holder.getAbsoluteAdapterPosition()).getId());
         // on below line we are setting selection for our spinner to spinner position.
-        holder.spinner.setSelection(optionRole.indexOf(users.get(holder.getAdapterPosition()).getRole()));
+        holder.spinner.setSelection(optionRole.indexOf(users.get(holder.getAbsoluteAdapterPosition()).getRole()));
         holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                options.RoleUser(users.get(holder.getAdapterPosition()), optionRole.get(i));
+                options.RoleUser(users.get(holder.getAbsoluteAdapterPosition()), optionRole.get(i));
             }
 
             @Override

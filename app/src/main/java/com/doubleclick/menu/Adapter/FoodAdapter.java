@@ -46,8 +46,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         Glide.with(holder.itemView.getContext()).load(foods.get(holder.getAbsoluteAdapterPosition()).getImage()).into(holder.img_food);
         holder.name_food.setText(foods.get(holder.getAbsoluteAdapterPosition()).getName());
+        holder.name_food.setSelected(true);
         holder.price_food.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPrice()));
         holder.details.setText(foods.get(holder.getAbsoluteAdapterPosition()).getDetails());
+        holder.details.setSelected(true);
         holder.itemView.setOnClickListener(view -> {
 //            Intent intent = new Intent(holder.itemView.getContext(), FoodActivity.class);
 //            intent.putExtra("food", foods.get(holder.getAdapterPosition()));

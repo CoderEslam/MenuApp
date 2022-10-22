@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -34,7 +36,9 @@ public class EditFragment extends BottomSheetDialogFragment {
 
     private TextInputEditText name;
     private Button edit;
-
+    private FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
+    private String uid;
 
     @Nullable
     @Override
@@ -47,6 +51,9 @@ public class EditFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         name = view.findViewById(R.id.name);
         edit = view.findViewById(R.id.edit);
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        uid = Objects.requireNonNull(firebaseUser).getUid();
         edit.setOnClickListener(v -> {
             update();
         });
@@ -57,7 +64,7 @@ public class EditFragment extends BottomSheetDialogFragment {
         if (!Objects.requireNonNull(name.getText()).toString().equals("")) {
             map.put("name", name.getText().toString());
         }
-        Repo.refe.child(USER).child(Repo.uid).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+        Repo.refe.child(USER).child(uid).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful() && isNetworkConnected(requireContext())) {

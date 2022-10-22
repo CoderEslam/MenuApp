@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created By Eslam Ghazy on 9/21/2022
  */
-public class UserViewModel extends ViewModel implements UserInterface {
+public class UserViewModel  implements UserInterface {
 
 
     private MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();

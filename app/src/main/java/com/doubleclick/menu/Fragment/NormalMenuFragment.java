@@ -107,7 +107,12 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         bundle.putParcelableArrayList("array", foods.getFood());
         bundle.putString("image", foods.getMenuItem().getImage());
         pageFragment.setArguments(bundle);
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(container_normal.getId(), pageFragment).commit();
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
+                .replace(container_normal.getId(), pageFragment)
+                .commit();
         drawerlayout_normal.closeMenu();
     }
 }

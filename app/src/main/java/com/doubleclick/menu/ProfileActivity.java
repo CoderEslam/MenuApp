@@ -35,6 +35,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,6 +45,7 @@ import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,6 +61,9 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout add_menu_item, add_new_dish, add_person, see_menu, logout;
     private CardView adding;
     private View divider1;
+    private FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +84,9 @@ public class ProfileActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.profile_details));
         setSupportActionBar(toolbar);
-
-
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        uid = Objects.requireNonNull(firebaseUser).getUid();
         back.setOnClickListener(view -> {
             finish();
         });
@@ -88,9 +95,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         logout.setOnClickListener(view -> {
-            if (Repo.user != null) {
-                Repo.auth.signOut();
-                Repo.user = null;
+            if (firebaseUser != null) {
+                auth.signOut();
+                userViewModel.getUser().removeObservers(this);
                 deleteCache(ProfileActivity.this);
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
@@ -103,19 +110,19 @@ public class ProfileActivity extends AppCompatActivity {
             editFragment.show(getSupportFragmentManager(), "Edit");
         });
         add_person.setOnClickListener(view -> {
-            if (Repo.user != null) {
+            if (firebaseUser != null) {
                 startActivity(new Intent(this, AddPersonActivity.class));
             }
         });
 
         add_new_dish.setOnClickListener(view -> {
-            if (Repo.user != null) {
+            if (firebaseUser != null) {
                 startActivity(new Intent(this, AddNewDishActivity.class));
             }
         });
 
         add_menu_item.setOnClickListener(view -> {
-            if (Repo.user != null) {
+            if (firebaseUser != null) {
                 startActivity(new Intent(this, AddNewMenuItemActivity.class));
             }
         });
@@ -125,12 +132,12 @@ public class ProfileActivity extends AppCompatActivity {
             openImage();
         });
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = new UserViewModel();
 
         userViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                if (Repo.user != null) {
+                if (firebaseUser != null) {
                     if (user.getRole().equals("Manger") || user.getRole().equals("مدير") || user.getRole().equals("Deshabilitar")) {
                         adding.setVisibility(View.VISIBLE);
                         divider1.setVisibility(View.VISIBLE);
@@ -166,13 +173,13 @@ public class ProfileActivity extends AppCompatActivity {
             pd.setMessage("Uploading");
             pd.show();
             final StorageReference fileReference = FirebaseStorage.getInstance()
-                    .getReference(IMAGES).child(Repo.uid + "." + getFileExtension(uri));
+                    .getReference(IMAGES).child(uid + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 url.addOnCompleteListener(task -> {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("image", task.getResult().toString());
-                    Repo.refe.child(USER).child(Repo.uid).updateChildren(map);
+                    Repo.refe.child(USER).child(uid).updateChildren(map);
                     pd.dismiss();
                 });
             });

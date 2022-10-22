@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.HashMap;
@@ -29,6 +31,9 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputEditText TextInputEditTextName, TextInputEditTextEmail, TextInputEditTextPassword;
     private Button sign_up;
     private ProgressBar progressBar;
+    private FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
         TextInputEditTextPassword = findViewById(R.id.password);
         sign_up = findViewById(R.id.sign_up);
         progressBar = findViewById(R.id.progressBar);
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        uid = Objects.requireNonNull(firebaseUser).getUid();
 
         sign_up.setOnClickListener(view -> {
             if (Check()) {
@@ -56,10 +64,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void SignUp(String email, String password, String name) {
-        Repo.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful() && isNetworkConnected(SignUpActivity.this)) {
                 HashMap<String, Object> map = new HashMap<>();
-                String id = Objects.requireNonNull(Repo.auth.getCurrentUser()).getUid().toString();
+                String id = Objects.requireNonNull(auth.getCurrentUser()).getUid().toString();
                 map.put("name", name);
                 map.put("email", email);
                 map.put("role", "Disable");
@@ -71,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
                     TextInputEditTextPassword.setText("");
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(SignUpActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
-                    Repo.auth.signOut();
+                    auth.signOut();
                     deleteCache(SignUpActivity.this);
                 });
             }

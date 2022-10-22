@@ -51,12 +51,4 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         auth.removeAuthStateListener(authStateListener);
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (Repo.user == null) {
-            finish();
-        }
-    }
 }
