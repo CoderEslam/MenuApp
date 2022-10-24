@@ -27,7 +27,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- must be in postion 2-->
+    <!-- must be in edPosition 1-->
     <com.doubleclick.menu.Views.flowingdrawer_core.FlowingMenuLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

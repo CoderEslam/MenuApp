@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -75,6 +76,8 @@ public class MenuActivity extends AppCompatActivity {
 //        viewPager.setAdapter(adapter);
 //        viewPagerTab.setViewPager(viewPager);
 //        adapter.notifyDataSetChanged();
+//        getRequestedOrientation();
+//        Configuration.ORIENTATION_LANDSCAPE
         userViewModel.getUser().observe(this, user -> {
             if (user != null && firebaseUser != null) {
                 if (user.getRole().equals("Disable") || user.getRole().equals("ايقاف") || user.getRole().equals("Deshabilitar")) {

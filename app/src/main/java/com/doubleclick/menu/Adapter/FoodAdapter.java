@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ablanco.zoomy.Zoomy;
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.FoodActivity;
+import com.doubleclick.menu.MenuActivity;
 import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.R;
 
@@ -62,7 +67,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             @Override
             public boolean onLongClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                builder.setTitle(foods.get(holder.getAdapterPosition()).getName());
+                builder.setTitle(foods.get(holder.getAbsoluteAdapterPosition()).getName());
                 builder.setMessage(holder.itemView.getContext().getResources().getString(R.string.details));
                 TextView text = new TextView(holder.itemView.getContext());
                 text.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -70,7 +75,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
                 text.setGravity(Gravity.CENTER);
                 text.setPadding(30, 5, 30, 5);
                 text.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.black));
-                text.setText(foods.get(holder.getAdapterPosition()).getDetails());
+                text.setText(foods.get(holder.getAbsoluteAdapterPosition()).getDetails());
                 builder.setView(text);
                 builder.setCancelable(true);
                 builder.setPositiveButton(holder.itemView.getContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
