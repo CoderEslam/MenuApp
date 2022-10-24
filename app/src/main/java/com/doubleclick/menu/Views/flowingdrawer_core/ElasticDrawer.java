@@ -433,8 +433,8 @@ public abstract class ElasticDrawer extends ViewGroup {
     /**
      * Toggles the menu open and close with animation.
      */
-    public void toggleMenu() {
-        toggleMenu(true);
+    public boolean toggleMenu() {
+        return toggleMenu(true);
     }
 
     /**
@@ -442,11 +442,15 @@ public abstract class ElasticDrawer extends ViewGroup {
      *
      * @param animate Whether open/close should be animated.
      */
-    public void toggleMenu(boolean animate) {
+    public boolean toggleMenu(boolean animate) {
         if (mDrawerState == STATE_OPEN || mDrawerState == STATE_OPENING) {
             closeMenu(animate);
+            return false;
         } else if (mDrawerState == STATE_CLOSED || mDrawerState == STATE_CLOSING) {
             openMenu(animate);
+            return true;
+        } else {
+            return false;
         }
     }
 

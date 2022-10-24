@@ -1,6 +1,7 @@
 package com.doubleclick.menu.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Adapter.LeftSideMenu;
+import com.doubleclick.menu.Interface.onClickMenu;
+import com.doubleclick.menu.MenuActivity;
 import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
 import com.doubleclick.menu.Repository.FoodRepository;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
  * Use the {@link VIPMenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuInterface {
+public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuInterface, onClickMenu {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,7 +49,6 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide_vip;
     private FragmentContainerView container_vip;
-    private ImageView menu;
     private FlowingDrawer drawerlayout_vip;
     private static final String TAG = "VIPMenuFragment";
 
@@ -94,14 +96,10 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
         recyclerLeftSide_vip = view.findViewById(R.id.recyclerLeftSide_vip);
         container_vip = view.findViewById(R.id.container_vip);
         foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
-        menu = requireActivity().findViewById(R.id.menu);
         drawerlayout_vip = view.findViewById(R.id.drawerlayout_vip);
         drawerlayout_vip.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         foodViewModel.FoodItemAllVIP().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide_vip.setAdapter(new LeftSideMenu(menuFoods, this));
-        });
-        menu.setOnClickListener(v -> {
-            drawerlayout_vip.toggleMenu();
         });
     }
 
@@ -120,5 +118,20 @@ public class VIPMenuFragment extends Fragment implements LeftSideMenu.LeftMenuIn
                 .replace(container_vip.getId(), pageFragment)
                 .commit();
         drawerlayout_vip.closeMenu();
+    }
+
+    @Override
+    public void onClick(View view) {
+        drawerlayout_vip.toggleMenu();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            ((MenuActivity) requireActivity()).setOnClick(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

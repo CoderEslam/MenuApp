@@ -1,42 +1,38 @@
 package com.doubleclick.menu.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.doubleclick.menu.Adapter.LeftSideMenu;
+import com.doubleclick.menu.Interface.onClickMenu;
 import com.doubleclick.menu.MenuActivity;
-import com.doubleclick.menu.Model.Food;
 import com.doubleclick.menu.Model.MenuFoods;
 import com.doubleclick.menu.R;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
 import com.doubleclick.menu.Views.flowingdrawer_core.ElasticDrawer;
 import com.doubleclick.menu.Views.flowingdrawer_core.FlowingDrawer;
 
-import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NormalMenuFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMenuInterface {
+public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMenuInterface, onClickMenu {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,7 +41,6 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
     private FoodViewModel foodViewModel;
     private RecyclerView recyclerLeftSide;
     private FragmentContainerView container_normal;
-    private ImageView menu;
     private FlowingDrawer drawerlayout_normal;
 
     public NormalMenuFragment() {
@@ -89,12 +84,8 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
         container_normal = view.findViewById(R.id.container_normal);
         drawerlayout_normal = view.findViewById(R.id.drawerlayout_normal);
         drawerlayout_normal.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
-        menu = requireActivity().findViewById(R.id.menu);
         foodViewModel.FoodItemAll().observe(getViewLifecycleOwner(), menuFoods -> {
             recyclerLeftSide.setAdapter(new LeftSideMenu(menuFoods, this));
-        });
-        menu.setOnClickListener(v -> {
-            drawerlayout_normal.toggleMenu();
         });
     }
 
@@ -114,5 +105,20 @@ public class NormalMenuFragment extends Fragment implements LeftSideMenu.LeftMen
                 .replace(container_normal.getId(), pageFragment)
                 .commit();
         drawerlayout_normal.closeMenu();
+    }
+
+    @Override
+    public void onClick(View view) {
+        drawerlayout_normal.toggleMenu();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            ((MenuActivity) requireActivity()).setOnClick(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

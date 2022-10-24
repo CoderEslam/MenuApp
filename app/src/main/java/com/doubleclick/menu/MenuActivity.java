@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.doubleclick.menu.Adapter.ViewPagerAdapter;
 import com.doubleclick.menu.Fragment.NormalMenuFragment;
 import com.doubleclick.menu.Fragment.PageFragment;
 import com.doubleclick.menu.Fragment.VIPMenuFragment;
+import com.doubleclick.menu.Interface.onClickMenu;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.UserViewModel;
 import com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView;
@@ -46,8 +48,10 @@ public class MenuActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private FirebaseAuth auth;
     private BubbleNavigationConstraintView floating_top_bar_navigation;
+    private onClickMenu onClick;
+    private ImageView menu;
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,7 @@ public class MenuActivity extends AppCompatActivity {
         image_profile = findViewById(R.id.image_profile);
         name = findViewById(R.id.name);
         container_menu = findViewById(R.id.container_menu);
+        menu = findViewById(R.id.menu);
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
         Log.e(TAG, "onCreate: " + firebaseUser.getUid());
@@ -130,6 +135,13 @@ public class MenuActivity extends AppCompatActivity {
                 finish();
             }
         });
+        menu.setOnClickListener(view -> {
+            onClick.onClick(view);
+        });
+    }
 
+
+    public void setOnClick(onClickMenu onClick) {
+        this.onClick = onClick;
     }
 }
