@@ -42,6 +42,8 @@ import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.Service.ItemMoveCallback;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
+import com.doubleclick.menu.Views.cropper.CropImage;
+import com.doubleclick.menu.Views.cropper.CropImageView;
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView;
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener;
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener;
@@ -85,7 +87,6 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         ItemTouchHelper.Callback callback = new ItemMoveCallback(menuAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(menu_items);
-
         menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         menuViewModel.MenuOperators();
         menuViewModel.MenuItemAdd().observe(this, menuItem -> {
@@ -145,25 +146,33 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
 
 
     public void openImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMAGE_REQUEST);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            String filePath = SiliCompressor.with(AddNewMenuItemActivity.this).compress(
-                    data.getData().toString(),
-                    new File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                                    .toString() + "/Menu/Images/"
-                    )
-            );
-            uri = Uri.parse(filePath);
-            image.setImageURI(uri);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                assert result != null;
+                String filePath = SiliCompressor.with(AddNewMenuItemActivity.this).compress(
+                        result.getUri().toString(),
+                        new File(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                        .toString() + "/Menu/Images/"
+                        )
+                );
+                uri = Uri.parse(filePath);
+                image.setImageURI(uri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                assert result != null;
+                Exception error = result.getError();
+            }
         }
     }
 
