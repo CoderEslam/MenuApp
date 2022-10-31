@@ -31,6 +31,8 @@ import com.doubleclick.menu.Fragment.EditFragment;
 import com.doubleclick.menu.Model.User;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.UserViewModel;
+import com.doubleclick.menu.Views.cropper.CropImage;
+import com.doubleclick.menu.Views.cropper.CropImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -153,10 +155,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void openImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMAGE_REQUEST);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
 
@@ -188,17 +191,24 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            String filePath = SiliCompressor.with(ProfileActivity.this).compress(
-                    data.getData().toString(),
-                    new File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                                    .toString() + "/Menu/Images/"
-                    )
-            );
-            uri = Uri.parse(filePath);
-            app_bar_image.setImageURI(uri);
-            uploadImage();
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                assert result != null;
+                String filePath = SiliCompressor.with(ProfileActivity.this).compress(
+                        result.getUri().toString(),
+                        new File(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                        .toString() + "/Menu/Images/"
+                        )
+                );
+                uri = Uri.parse(filePath);
+                app_bar_image.setImageURI(uri);
+                uploadImage();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                assert result != null;
+                Exception error = result.getError();
+            }
         }
     }
 

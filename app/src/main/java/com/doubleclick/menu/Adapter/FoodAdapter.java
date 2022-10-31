@@ -52,7 +52,36 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         Glide.with(holder.itemView.getContext()).load(foods.get(holder.getAbsoluteAdapterPosition()).getImage()).into(holder.img_food);
         holder.name_food.setText(foods.get(holder.getAbsoluteAdapterPosition()).getName());
         holder.name_food.setSelected(true);
-        holder.price_food.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPrice()));
+        // for small only
+        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+            holder.price_food_small.setText(String.format("%s", String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall())));
+            holder.price_food_medium.setVisibility(View.GONE);
+            holder.price_food_large.setVisibility(View.GONE);
+        }
+        // for small and medium
+        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+            holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
+            holder.price_food_large.setText("--");
+        }
+        // for small and Large
+        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
+            holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
+            holder.price_food_medium.setText("--");
+            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+        }
+        // for all
+        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
+            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+            holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
+            holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
+        }
+        // for no monye
+        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+            holder.price_food_small.setText(holder.itemView.getResources().getString(R.string.no_money));
+            holder.price_food_medium.setVisibility(View.GONE);
+            holder.price_food_large.setVisibility(View.GONE);
+        }
         holder.details.setText(foods.get(holder.getAbsoluteAdapterPosition()).getDetails());
         holder.details.setSelected(true);
         holder.itemView.setOnClickListener(view -> {
@@ -98,13 +127,15 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public class FoodViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView img_food;
-        private TextView name_food, price_food, details;
+        private TextView name_food, price_food_small, price_food_medium, price_food_large, details;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             img_food = itemView.findViewById(R.id.img_food);
             name_food = itemView.findViewById(R.id.name_food);
-            price_food = itemView.findViewById(R.id.price_food);
+            price_food_small = itemView.findViewById(R.id.price_food_small);
+            price_food_medium = itemView.findViewById(R.id.price_food_medium);
+            price_food_large = itemView.findViewById(R.id.price_food_large);
             details = itemView.findViewById(R.id.details);
         }
     }

@@ -135,7 +135,6 @@ public class MenuActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(MenuActivity.this, getResources().getString(R.string.sign_in_frist), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MenuActivity.this, MainActivity.class));
-                finish();
             }
         });
         menu.setOnClickListener(view -> {

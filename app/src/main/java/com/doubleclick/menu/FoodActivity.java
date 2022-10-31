@@ -37,12 +37,12 @@ public class FoodActivity extends AppCompatActivity {
         recyclerView_ingrendiets = findViewById(R.id.recyclerView_ingrendiets);
         Glide.with(this).load(food.getImage()).into(image_food);
         name_food.setText(food.getName());
-        price_food.setText(String.valueOf(food.getPrice()));
+        price_food.setText(String.valueOf(food.getPriceSmall()));
         details.setText(food.getDetails());
         add.setOnClickListener(view -> {
             quntity++;
             number.setText(String.valueOf(quntity));
-            total_price.setText(String.valueOf(quntity * food.getPrice()));
+            total_price.setText(String.valueOf(quntity * food.getPriceSmall()));
         });
 
 
@@ -50,7 +50,7 @@ public class FoodActivity extends AppCompatActivity {
             if (quntity > 0) {
                 quntity--;
                 number.setText(String.valueOf(quntity));
-                total_price.setText(String.valueOf(quntity * food.getPrice()));
+                total_price.setText(String.valueOf(quntity * food.getPriceSmall()));
             }
         });
 

@@ -4,7 +4,7 @@
     <string name="sign_in">Iniciar sesión</string>
     <string name="sign_up">Inscribirse</string>
     <string name="name">Nombre</string>
-    <string name="euro">€</string>
+    <string name="euro">Dh</string>
     <string name="price">0.0</string>
     <string name="profile_details">Detalles del perfil</string>
     <string name="user_name">Nombre de usuario</string>
@@ -53,6 +53,10 @@
     <string name="crop_image_menu_flip_vertically">Voltear verticalmente</string>
     <string name="pick_image_intent_chooser_title">Seleccionar fuente</string>
     <string name="crop_image_activity_no_permissions">Cancelando, los permisos requeridos no han sido otorgados</string>
+    <string name="small_price">pequeño precio *</string>
+    <string name="medium_price">precio por medio (opcional)</string>
+    <string name="large_price">gran precio (opcional)</string>
+    <string name="no_money">Sin dinero</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>
@@ -62,5 +66,10 @@
     <string-array name="menu_option">
         <item>VIP</item>
         <item>Normal</item>
+    </string-array>
+
+    <string-array name="price_option">
+        <item>1</item>
+        <item>3</item>
     </string-array>
 </resources>

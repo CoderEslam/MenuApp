@@ -38,6 +38,8 @@ import com.doubleclick.menu.Model.MenuItem;
 import com.doubleclick.menu.Repository.Repo;
 import com.doubleclick.menu.ViewModel.FoodViewModel;
 import com.doubleclick.menu.ViewModel.MenuViewModel;
+import com.doubleclick.menu.Views.cropper.CropImage;
+import com.doubleclick.menu.Views.cropper.CropImageView;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,8 +56,9 @@ import java.util.Objects;
 public class AddNewDishActivity extends AppCompatActivity implements FoodOptions {
 
     private ImageView image;
-    private TextInputEditText name, price, details;
+    private TextInputEditText name, price_food_small, price_food_medium, price_food_large, details;
     private SmartMaterialSpinner<MenuItem> spinnerMenu;
+    private SmartMaterialSpinner<Integer> spinnerPrice;
     private SmartMaterialSpinner<Food> spinnerClassification;
     private final int IMAGE_REQUEST = 100;
     private Uri uri = null;
@@ -76,7 +79,9 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         name = findViewById(R.id.name);
         spinnerMenu = findViewById(R.id.spinnerMenu);
         spinnerClassification = findViewById(R.id.spinnerClassification);
-        price = findViewById(R.id.price_food);
+        price_food_small = findViewById(R.id.price_food_small);
+        price_food_medium = findViewById(R.id.price_food_medium);
+        price_food_large = findViewById(R.id.price_food_large);
         Button upload = findViewById(R.id.upload);
         RecyclerView dishs = findViewById(R.id.dishs);
         details = findViewById(R.id.details);
@@ -104,7 +109,6 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
             });
 
         });
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClassification.setAdapter(adapter);
@@ -138,14 +142,13 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
             foods.remove(food);
             dishAdapter.notifyItemRemoved(foods.indexOf(food));
             dishAdapter.notifyDataSetChanged();
-
         });
 
         image.setOnClickListener(view -> openImage());
 
         upload.setOnClickListener(view -> {
-            if (uri != null && !Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price.getText()).toString().equals("") && !Objects.requireNonNull(details.getText()).toString().equals("") && menuItemSelected != null) {
-                uploadImage(uri, name.getText().toString().trim(), price.getText().toString().trim(), details.getText().toString().trim(), menuItemSelected);
+            if (uri != null && !Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food_small.getText()).toString().equals("") && !Objects.requireNonNull(details.getText()).toString().equals("") && menuItemSelected != null) {
+                uploadImage(uri, name.getText().toString().trim(), price_food_small.getText().toString().trim(), Objects.requireNonNull(price_food_medium.getText()).toString().trim(), Objects.requireNonNull(price_food_large.getText()).toString().trim(), details.getText().toString().trim(), menuItemSelected);
             }
         });
 
@@ -153,10 +156,11 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     }
 
     public void openImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMAGE_REQUEST);
+        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
     public String getFileExtension(Uri uri) {
@@ -166,7 +170,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void uploadImage(Uri uri, String n, String p, String d, MenuItem menuItem) {
+    public void uploadImage(Uri uri, String n, String pS, String pM, String pL, String d, MenuItem menuItem) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -180,14 +184,26 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 map.put("image", task.getResult().toString());
                 map.put("name", n);
                 map.put("details", d);
-                map.put("price", Double.valueOf(p));
+                map.put("priceSmall", Double.valueOf(pS));
+                if (pM.equals("")) {
+                    map.put("priceMedium", 0);
+                } else {
+                    map.put("priceMedium", Double.valueOf(pM));
+                }
+                if (pL.equals("")) {
+                    map.put("priceLarge", 0);
+                } else {
+                    map.put("priceLarge", Double.valueOf(pL));
+                }
                 map.put("id", id);
                 map.put("classification", menuOptionItemSelected);
                 map.put("idMenu", menuItem.getId());
                 Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(task1 -> {
                     image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
                     name.setText("");
-                    price.setText("");
+                    price_food_small.setText("");
+                    price_food_medium.setText("");
+                    price_food_large.setText("");
                     details.setText("");
                     pd.dismiss();
                 });
@@ -197,7 +213,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     }
 
-    public void editDish(Uri uri, String name, String price, String details, MenuItem menuItem, String id, String menuOptionItemSelected) {
+    public void editDish(Uri uri, String name, String priceSmall, String priceMedium, String priceLarge, String details, MenuItem menuItem, String id, String menuOptionItemSelected) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -211,7 +227,22 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                     map.put("image", task.getResult().toString());
                     map.put("name", name);
                     map.put("details", details);
-                    map.put("price", Double.valueOf(price));
+                    try {
+                        map.put("priceSmall", Double.valueOf(priceSmall));
+                        if (priceMedium.equals("")) {
+                            map.put("priceMedium", 0);
+                        } else {
+                            map.put("priceMedium", Double.valueOf(priceMedium));
+                        }
+                        if (priceMedium.equals("")) {
+                            map.put("priceLarge", 0);
+                        } else {
+                            map.put("priceLarge", Double.valueOf(priceLarge));
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
                     map.put("id", id);
                     map.put("classification", menuOptionItemSelected);
                     map.put("idMenu", menuItem.getId());
@@ -226,7 +257,21 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
             HashMap<String, Object> map = new HashMap<>();
             map.put("name", name);
             map.put("details", details);
-            map.put("price", Double.valueOf(price));
+            try {
+                map.put("priceSmall", Double.valueOf(priceSmall));
+                if (priceMedium.equals("")) {
+                    map.put("priceMedium", 0);
+                } else {
+                    map.put("priceMedium", Double.valueOf(priceMedium));
+                }
+                if (priceMedium.equals("")) {
+                    map.put("priceLarge", 0);
+                } else {
+                    map.put("priceLarge", Double.valueOf(priceLarge));
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
             map.put("id", id);
             map.put("classification", menuOptionItemSelected);
             map.put("idMenu", menuItem.getId());
@@ -240,16 +285,23 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            String filePath = SiliCompressor.with(AddNewDishActivity.this).compress(
-                    data.getData().toString(),
-                    new File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                                    .toString() + "/Menu/Images/"
-                    )
-            );
-            uri = Uri.parse(filePath);
-            image.setImageURI(uri);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                assert result != null;
+                String filePath = SiliCompressor.with(AddNewDishActivity.this).compress(
+                        result.getUri().toString(),
+                        new File(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                        .toString() + "/Menu/Images/"
+                        )
+                );
+                uri = Uri.parse(filePath);
+                image.setImageURI(uri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                assert result != null;
+                Exception error = result.getError();
+            }
         }
     }
 
@@ -274,12 +326,16 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         image.setOnClickListener(view -> openImage());
         TextInputEditText name = v.findViewById(R.id.name);
         TextInputEditText details = v.findViewById(R.id.details);
-        TextInputEditText price_food = v.findViewById(R.id.price_food);
+        TextInputEditText price_food_small = v.findViewById(R.id.price_food_small);
+        TextInputEditText price_food_medium = v.findViewById(R.id.price_food_medium);
+        TextInputEditText price_food_large = v.findViewById(R.id.price_food_large);
         SmartMaterialSpinner<MenuItem> spinnerMenu = v.findViewById(R.id.spinnerMenu);
         SmartMaterialSpinner<String> spinnerClassification = v.findViewById(R.id.spinnerClassification);
         name.setText(food.getName());
         details.setText(food.getDetails());
-        price_food.setText(String.valueOf(food.getPrice()));
+        price_food_small.setText(String.valueOf(food.getPriceSmall()));
+        price_food_medium.setText(String.valueOf(food.getPriceMedium()));
+        price_food_large.setText(String.valueOf(food.getPriceLarge()));
         spinnerMenu.setSelection(menuItems.indexOf(new MenuItem(food.getIdMenu())));
         spinnerClassification.setSelection(menuOption.indexOf(food.getClassification()));
         Log.e(TAG, "UpdateFood: " + menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu()))).Menu());
@@ -314,8 +370,8 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         Button edit = v.findViewById(R.id.edit);
         edit.setOnClickListener(view -> {
             if (isNetworkConnected(AddNewDishActivity.this)) {
-                if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food.getText()).toString().equals("") && menuItemSelected != null) {
-                    editDish(uri, name.getText().toString().trim(), price_food.getText().toString().trim(), Objects.requireNonNull(details.getText()).toString().trim(), menuItemSelected, food.getId(), menuOptionItemSelected);
+                if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food_small.getText()).toString().equals("") && menuItemSelected != null) {
+                    editDish(uri, name.getText().toString().trim(), price_food_small.getText().toString().trim(), price_food_medium.getText().toString().trim(), price_food_large.getText().toString().trim(), Objects.requireNonNull(details.getText()).toString().trim(), menuItemSelected, food.getId(), menuOptionItemSelected);
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
                 }

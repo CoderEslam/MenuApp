@@ -89,15 +89,15 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
-                        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout22"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout22"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout22">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/price_food"
+                            android:id="@+id/price_food_large"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/_price_"
+                            android:hint="@string/large_price"
                             android:inputType="numberDecimal"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
@@ -105,6 +105,51 @@
                             android:textSize="32sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout22"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout222"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout222"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout222">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/price_food_medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/medium_price"
+                            android:inputType="numberDecimal"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/gray"
+                            android:textSize="32sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout222"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/price_food_small"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/small_price"
+                            android:inputType="numberDecimal"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/gray"
+                            android:textSize="32sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
                         android:id="@+id/spinnerMenu"

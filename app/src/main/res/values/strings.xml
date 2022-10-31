@@ -4,7 +4,7 @@
     <string name="sign_up">Sign up</string>
     <string name="name">Name</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="euro">€</string>
+    <string name="euro">Dh</string>
     <string name="price">0.0</string>
     <string name="profile_details">Profile Details</string>
     <string name="user_name">Username</string>
@@ -51,6 +51,12 @@
         <item>VIP</item>
         <item>Normal</item>
     </string-array>
+
+    <string-array name="price_option">
+        <item>1</item>
+        <item>3</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="normal">Normal</string>
     <string name="we_working_on_it">We working on it</string>
@@ -66,5 +72,9 @@
     <string name="pick_image_intent_chooser_title">Select source</string>
 
     <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
+    <string name="small_price">small price *</string>
+    <string name="medium_price">medium price optional</string>
+    <string name="large_price">large price optional</string>
+    <string name="no_money">no money</string>
 
 </resources>

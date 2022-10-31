@@ -4,7 +4,7 @@
     <string name="sign_in">تسجيل دخول</string>
     <string name="sign_up">مستخدم جديد</string>
     <string name="name">الاسم</string>
-    <string name="euro">€</string>
+    <string name="euro">Dh</string>
     <string name="price">0.0</string>
     <string name="profile_details">التفاصيل</string>
     <string name="user_name">اسم المستخدم</string>
@@ -55,6 +55,10 @@
     <string name="pick_image_intent_chooser_title">اختر مصدرًا</string>
 
     <string name="crop_image_activity_no_permissions">إلغاء؛ الأذونات المطلوبة غير ممنوحة</string>
+    <string name="small_price">سعر صغير *</string>
+    <string name="medium_price">سعر متوسط (اختياري)</string>
+    <string name="large_price">سعر كبير (اختياري)</string>
+    <string name="no_money">لا يوجد نقود</string>
 
     <string-array name="user_option">
         <item>مدير</item>
@@ -65,5 +69,10 @@
     <string-array name="menu_option">
         <item>VIP</item>
         <item>Normal</item>
+    </string-array>
+
+    <string-array name="price_option">
+        <item>1</item>
+        <item>3</item>
     </string-array>
 </resources>

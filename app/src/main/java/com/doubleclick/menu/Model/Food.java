@@ -11,7 +11,9 @@ import java.util.Objects;
 public class Food implements Parcelable {
     private String name;
     private String image;
-    private double price;
+    private double priceSmall;
+    private double priceMedium;
+    private double priceLarge;
     private String id;
     private String idMenu;
     private String details;
@@ -20,7 +22,9 @@ public class Food implements Parcelable {
     public Food() {
         details = "";
         image = "";
-        price = 0.0;
+        priceSmall = 0;
+        priceMedium = 0;
+        priceLarge = 0;
         idMenu = "";
         id = "";
         name = "";
@@ -30,7 +34,9 @@ public class Food implements Parcelable {
     protected Food(Parcel in) {
         name = in.readString();
         image = in.readString();
-        price = in.readDouble();
+        priceSmall = in.readDouble();
+        priceMedium = in.readDouble();
+        priceLarge = in.readDouble();
         id = in.readString();
         idMenu = in.readString();
         details = in.readString();
@@ -66,13 +72,6 @@ public class Food implements Parcelable {
         this.image = image;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public String getId() {
         return id;
@@ -95,7 +94,7 @@ public class Food implements Parcelable {
         return "Food{" +
                 "name='" + name + '\'' +
                 ", image='" + image + '\'' +
-                ", price=" + price +
+                ", price=" + priceSmall +
                 ", id='" + id + '\'' +
                 ", idMenu='" + idMenu + '\'' +
                 '}';
@@ -126,7 +125,9 @@ public class Food implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeString(image);
-        parcel.writeDouble(price);
+        parcel.writeDouble(priceSmall);
+        parcel.writeDouble(priceMedium);
+        parcel.writeDouble(priceLarge);
         parcel.writeString(id);
         parcel.writeString(idMenu);
         parcel.writeString(details);
@@ -144,5 +145,17 @@ public class Food implements Parcelable {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public double getPriceSmall() {
+        return priceSmall;
+    }
+
+    public double getPriceMedium() {
+        return priceMedium;
+    }
+
+    public double getPriceLarge() {
+        return priceLarge;
     }
 }
