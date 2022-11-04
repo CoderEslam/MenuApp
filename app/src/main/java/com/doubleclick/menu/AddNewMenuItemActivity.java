@@ -62,7 +62,7 @@ import java.util.Objects;
 
 public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOptions {
 
-    private ImageView image;
+    private ImageView image, image_bg;
     private TextInputEditText name;
     private Button upload;
     private RecyclerView menu_items;
@@ -70,6 +70,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
     private MenuViewModel menuViewModel;
     private MenuAdapter menuAdapter;
     private Uri uri = null;
+    private Uri uri_bg = null;
     private static final int IMAGE_REQUEST = 100;
     private static final String TAG = "AddNewMenuItemActivity";
 
@@ -79,6 +80,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_menu_item);
         image = findViewById(R.id.image);
+        image_bg = findViewById(R.id.image_bg);
         name = findViewById(R.id.name);
         upload = findViewById(R.id.upload);
         menu_items = findViewById(R.id.menu_items);
@@ -142,6 +144,10 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             uploadImage();
         });
 
+        image_bg.setOnClickListener(view -> {
+            galleryForBackground();
+        });
+
     }
 
 
@@ -151,6 +157,13 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
 //        intent.setType("image/*");
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        startActivityForResult(intent, IMAGE_REQUEST);
+    }
+
+    public void galleryForBackground() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
     @Override
@@ -174,6 +187,20 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                 Exception error = result.getError();
             }
         }
+        if (requestCode == IMAGE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                assert data != null;
+                String filePath = SiliCompressor.with(AddNewMenuItemActivity.this).compress(
+                        data.getData().toString(),
+                        new File(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                        .toString() + "/Menu/Images/"
+                        )
+                );
+                uri_bg = Uri.parse(filePath);
+                image_bg.setImageURI(uri_bg);
+            }
+        }
     }
 
     public void uploadImage() {
@@ -181,25 +208,33 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
             final ProgressDialog pd = new ProgressDialog(this);
             pd.setMessage("Uploading");
             pd.show();
-            final StorageReference fileReference = FirebaseStorage.getInstance()
-                    .getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
+            final StorageReference fileReference = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 url.addOnCompleteListener(task -> {
-                    HashMap<String, Object> map = new HashMap<>();
-                    String id = Repo.refe.push().getKey() + System.currentTimeMillis();
-                    map.put("image", task.getResult().toString());
-                    map.put("name", name.getText().toString().trim());
-                    map.put("id", id);
-                    Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @SuppressLint("UseCompatLoadingForDrawables")
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            name.setText("");
-                            image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
-                        }
+                    final StorageReference fileReference_bg = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri_bg));
+                    fileReference_bg.putFile(uri_bg).addOnSuccessListener(taskSnapshot1 -> {
+                        Task<Uri> url_bg = taskSnapshot1.getStorage().getDownloadUrl();
+                        url_bg.addOnCompleteListener(task_bg -> {
+                            HashMap<String, Object> map = new HashMap<>();
+                            String id = Repo.refe.push().getKey() + System.currentTimeMillis();
+                            map.put("image", task.getResult().toString());
+                            map.put("image_bg", task_bg.getResult().toString());
+                            map.put("name", name.getText().toString().trim());
+                            map.put("id", id);
+                            map.put("index", 0);
+                            Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @SuppressLint("UseCompatLoadingForDrawables")
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    name.setText("");
+                                    image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                                    image_bg.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
+                                }
+                            });
+                            pd.dismiss();
+                        });
                     });
-                    pd.dismiss();
                 });
             });
         }
@@ -246,9 +281,14 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         v.setPadding(30, 5, 30, 5);
         image = v.findViewById(R.id.image);
+        image_bg = v.findViewById(R.id.image_bg);
         Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage()).into(image);
+        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage_bg()).into(image_bg);
         image.setOnClickListener(view -> {
             openImage();
+        });
+        image_bg.setOnClickListener(view -> {
+            galleryForBackground();
         });
         TextInputEditText name = v.findViewById(R.id.name);
         name.setText(menuItem.getName());
@@ -256,7 +296,7 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         edit.setOnClickListener(view -> {
             if (isNetworkConnected(AddNewMenuItemActivity.this)) {
                 if (!Objects.requireNonNull(name.getText()).toString().equals("")) {
-                    editDish(uri, name.getText().toString().trim(), menuItem.getId(), builder);
+                    editDish(uri, uri_bg, name.getText().toString().trim(), menuItem.getId(), builder);
                 }
             } else {
                 Toast.makeText(this, getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -284,13 +324,12 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
 
     }
 
-    public void editDish(Uri uri, String name, String id, AlertDialog.Builder builder) {
+    public void editDish(Uri uri, Uri uri_bg, String name, String id, AlertDialog.Builder builder) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
-        if (uri != null) {
-            final StorageReference fileReference = FirebaseStorage.getInstance()
-                    .getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        if (uri != null && uri_bg == null) {
+            final StorageReference fileReference = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
             fileReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 url.addOnCompleteListener(task -> {
@@ -306,6 +345,50 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
                         }
                     });
 
+                });
+            });
+        } else if (uri_bg != null && uri == null) {
+            final StorageReference fileReference = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri_bg));
+            fileReference.putFile(uri_bg).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
+                url.addOnCompleteListener(task -> {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("image_bg", task.getResult().toString());
+                    map.put("name", name);
+                    map.put("id", id);
+                    Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            pd.dismiss();
+                            Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                });
+            });
+        } else if (uri_bg != null && uri != null) {
+            final StorageReference fileReference_bg = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri_bg));
+            fileReference_bg.putFile(uri_bg).addOnSuccessListener(taskSnapshot -> {
+                Task<Uri> url_bg = taskSnapshot.getStorage().getDownloadUrl();
+                url_bg.addOnCompleteListener(task_bg -> {
+                    final StorageReference fileReference = FirebaseStorage.getInstance().getReference(IMAGES).child(System.currentTimeMillis() + "." + getFileExtension(uri));
+                    fileReference.putFile(uri).addOnSuccessListener(taskSnapshot1 -> {
+                        Task<Uri> url = taskSnapshot1.getStorage().getDownloadUrl();
+                        url.addOnCompleteListener(task1 -> {
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("image_bg", task_bg.getResult().toString());
+                            map.put("image", task1.getResult().toString());
+                            map.put("name", name);
+                            map.put("id", id);
+                            Repo.refe.child(MENU).child(id).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    pd.dismiss();
+                                    Toast.makeText(AddNewMenuItemActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        });
+                    });
                 });
             });
         } else {

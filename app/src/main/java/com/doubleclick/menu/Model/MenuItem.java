@@ -8,6 +8,7 @@ import java.util.Objects;
 public class MenuItem {
     private String name;
     private String image;
+    private String image_bg;
     private String id;
     private int index;
 
@@ -22,6 +23,7 @@ public class MenuItem {
         this.id = "";
         this.name = name.toString();
         image = "";
+        image_bg = "";
         index = 0;
     }
 
@@ -29,6 +31,7 @@ public class MenuItem {
         name = "";
         id = "";
         image = "";
+        image_bg = "";
         index = 0;
     }
 
@@ -84,5 +87,13 @@ public class MenuItem {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getImage_bg() {
+        return image_bg;
+    }
+
+    public void setImage_bg(String image_bg) {
+        this.image_bg = image_bg;
     }
 }
