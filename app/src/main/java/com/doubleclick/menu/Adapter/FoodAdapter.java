@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     private ArrayList<Food> foods = new ArrayList<>();
 
+    private static final String TAG = "FoodAdapter";
+
     public FoodAdapter(ArrayList<Food> foods) {
         this.foods = foods;
     }
@@ -52,36 +55,43 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         Glide.with(holder.itemView.getContext()).load(foods.get(holder.getAbsoluteAdapterPosition()).getImage()).into(holder.img_food);
         holder.name_food.setText(foods.get(holder.getAbsoluteAdapterPosition()).getName());
         holder.name_food.setSelected(true);
-        // for small only
-        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
-            holder.price_food_small.setText(String.format("%s", String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall())));
-            holder.price_food_medium.setVisibility(View.GONE);
-            holder.price_food_large.setVisibility(View.GONE);
+
+        try {
+            // for small only
+            if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+                holder.price_food_small.setText(String.format("%s", String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall())));
+                holder.price_food_medium.setVisibility(View.GONE);
+                holder.price_food_large.setVisibility(View.GONE);
+            }
+            // for small and medium
+            if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+                holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+                holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
+                holder.price_food_large.setText("--");
+            }
+            // for small and Large
+            if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
+                holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
+                holder.price_food_medium.setText("--");
+                holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+            }
+            // for all
+            if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
+                holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
+                holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
+                holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
+            }
+            // for no monye
+            if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
+                holder.price_food_small.setText(holder.itemView.getResources().getString(R.string.no_money));
+                holder.price_food_medium.setVisibility(View.GONE);
+                holder.price_food_large.setVisibility(View.GONE);
+            }
+
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "onBindViewHolder: " + e.getMessage());
         }
-        // for small and medium
-        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
-            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
-            holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
-            holder.price_food_large.setText("--");
-        }
-        // for small and Large
-        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
-            holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
-            holder.price_food_medium.setText("--");
-            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
-        }
-        // for all
-        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() != 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() != 0) {
-            holder.price_food_small.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall()));
-            holder.price_food_medium.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium()));
-            holder.price_food_large.setText(String.valueOf(foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge()));
-        }
-        // for no monye
-        if (foods.get(holder.getAbsoluteAdapterPosition()).getPriceSmall() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceMedium() == 0 && foods.get(holder.getAbsoluteAdapterPosition()).getPriceLarge() == 0) {
-            holder.price_food_small.setText(holder.itemView.getResources().getString(R.string.no_money));
-            holder.price_food_medium.setVisibility(View.GONE);
-            holder.price_food_large.setVisibility(View.GONE);
-        }
+
         holder.details.setText(foods.get(holder.getAbsoluteAdapterPosition()).getDetails());
         holder.details.setSelected(true);
         holder.itemView.setOnClickListener(view -> {

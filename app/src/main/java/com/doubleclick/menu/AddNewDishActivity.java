@@ -184,16 +184,32 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 map.put("image", task.getResult().toString());
                 map.put("name", n);
                 map.put("details", d);
-                map.put("priceSmall", Double.valueOf(pS));
+                if (pS.equals("")) {
+                    map.put("priceSmall", 0);
+                } else {
+                    try {
+                        map.put("priceSmall", Double.valueOf(pS));
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "uploadImage: " + e.getMessage());
+                    }
+                }
                 if (pM.equals("")) {
                     map.put("priceMedium", 0);
                 } else {
-                    map.put("priceMedium", Double.valueOf(pM));
+                    try {
+                        map.put("priceMedium", Double.valueOf(pM));
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "uploadImage: " + e.getMessage());
+                    }
                 }
                 if (pL.equals("")) {
                     map.put("priceLarge", 0);
                 } else {
-                    map.put("priceLarge", Double.valueOf(pL));
+                    try {
+                        map.put("priceLarge", Double.valueOf(pL));
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "uploadImage: " + e.getMessage());
+                    }
                 }
                 map.put("id", id);
                 map.put("classification", menuOptionItemSelected);
@@ -232,17 +248,24 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                         if (priceMedium.equals("")) {
                             map.put("priceMedium", 0);
                         } else {
-                            map.put("priceMedium", Double.valueOf(priceMedium));
+                            try {
+                                map.put("priceMedium", Double.valueOf(priceMedium));
+                            } catch (NumberFormatException e) {
+                                Log.e(TAG, "editDish: " + e.getMessage());
+                            }
                         }
                         if (priceMedium.equals("")) {
                             map.put("priceLarge", 0);
                         } else {
-                            map.put("priceLarge", Double.valueOf(priceLarge));
+                            try {
+                                map.put("priceLarge", Double.valueOf(priceLarge));
+                            } catch (NumberFormatException e) {
+                                Log.e(TAG, "editDish: " + e.getMessage());
+                            }
                         }
                     } catch (NumberFormatException e) {
                         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
                     map.put("id", id);
                     map.put("classification", menuOptionItemSelected);
                     map.put("idMenu", menuItem.getId());

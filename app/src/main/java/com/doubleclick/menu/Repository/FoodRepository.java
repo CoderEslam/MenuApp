@@ -93,8 +93,13 @@ public class FoodRepository extends Repo {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
-                    Food foodObject = dataSnapshot1.getValue(Food.class);
-                    foods.add(foodObject);
+                    try {
+                        Food foodObject = dataSnapshot1.getValue(Food.class);
+                        foods.add(foodObject);
+                    } catch (Exception e) {
+                        Log.e(TAG, "onDataChange: " + e.getMessage());
+                    }
+
                 }
                 Rearengment();
                 RearengmentVIP();
