@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/viewpagertab"
             app:layout_constraintVertical_bias="0.0" />
 
-        <com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView
+        <com.doubleclick.coinchaud.Views.bubblenavigation.BubbleNavigationConstraintView
             android:id="@+id/floating_top_bar_navigation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
 
-            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
+            <com.doubleclick.coinchaud.Views.bubblenavigation.BubbleToggleView
                 android:id="@+id/l_item_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.doubleclick.menu.Views.bubblenavigation.BubbleToggleView
+            <com.doubleclick.coinchaud.Views.bubblenavigation.BubbleToggleView
                 android:id="@+id/l_item_vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                 app:layout_constraintStart_toEndOf="@+id/l_item_normal"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </com.doubleclick.menu.Views.bubblenavigation.BubbleNavigationConstraintView>
+        </com.doubleclick.coinchaud.Views.bubblenavigation.BubbleNavigationConstraintView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

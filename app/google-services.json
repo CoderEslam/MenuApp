@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "996949732005",
-    "project_id": "menuapp-a9ad6",
-    "storage_bucket": "menuapp-a9ad6.appspot.com"
+    "project_number": "640564602709",
+    "project_id": "coin-chaud-b92a3",
+    "storage_bucket": "coin-chaud-b92a3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:996949732005:android:4b20103cc865b25649fb4c",
+        "mobilesdk_app_id": "1:640564602709:android:928ed49da033565c3bf1dc",
         "android_client_info": {
-          "package_name": "com.doubleclick.menu"
+          "package_name": "com.doubleclick.coinchaud"
         }
       },
       "oauth_client": [
         {
-          "client_id": "996949732005-cca9rdi4ru42gs6du59fd1nbvdtsoh39.apps.googleusercontent.com",
+          "client_id": "640564602709-e5fjiri3vch3jt5kbm6l47f3pa4icspj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doubleclick.coinchaud",
+            "certificate_hash": "f367566018492b50a0de360a9e903ef2ccef19e9"
+          }
+        },
+        {
+          "client_id": "640564602709-dbjf3ba2sh5ujukfcu5lajduvkdaffoi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDD59N8dlUGxnen7VvA0HK8s6M5cb9GClk"
+          "current_key": "AIzaSyCw3sZgqqwVkmPY9AT7mouSBkEtijZVqVQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "996949732005-cca9rdi4ru42gs6du59fd1nbvdtsoh39.apps.googleusercontent.com",
+              "client_id": "640564602709-dbjf3ba2sh5ujukfcu5lajduvkdaffoi.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
