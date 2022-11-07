@@ -48,8 +48,8 @@
         <item>Disable</item>
     </string-array>
     <string-array name="menu_option">
-        <item>VIP</item>
         <item>Normal</item>
+        <item>VIP</item>
     </string-array>
 
     <string-array name="price_option">

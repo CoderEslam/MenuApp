@@ -103,11 +103,12 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-
+                    menuItemSelected = menuItems.get(0);
                 }
             });
 
         });
+        /* VIP Or Normal */
         ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClassification.setAdapter(adapter);
@@ -119,7 +120,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                menuOptionItemSelected = menuOption.get(0);
             }
         });
 
