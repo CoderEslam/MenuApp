@@ -59,6 +59,8 @@
     <string name="medium_price">سعر متوسط (اختياري)</string>
     <string name="large_price">سعر كبير (اختياري)</string>
     <string name="no_money">لا يوجد نقود</string>
+    <string name="icon">أيقونة</string>
+    <string name="background">الصوره الخلفية</string>
 
     <string-array name="user_option">
         <item>مدير</item>
@@ -66,7 +68,7 @@
         <item>ايقاف</item>
     </string-array>
 
-    <string-array name="menu_option">
+    <string-array name="menu_option_vip_normal">
         <item>VIP</item>
         <item>Normal</item>
     </string-array>

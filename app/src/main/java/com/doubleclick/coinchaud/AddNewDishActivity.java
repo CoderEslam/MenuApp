@@ -58,14 +58,14 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
     private ImageView image;
     private TextInputEditText name, price_food_small, price_food_medium, price_food_large, details;
     private SmartMaterialSpinner<MenuItem> spinnerMenu;
-    private SmartMaterialSpinner<Food> spinnerClassification;
+    private SmartMaterialSpinner<Food> spinnerVIP_Normal;
     private final int IMAGE_REQUEST = 100;
     private Uri uri = null;
     private MenuItem menuItemSelected = null;
-    private String menuOptionItemSelected = "";
+    private String menuOptionItemSelectedVIP_Normal = "";
     private ArrayList<Food> foods = new ArrayList<>();
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
-    private List<String> menuOption;
+    private List<String> menuOption_vip_normal;
     private DishAdapter dishAdapter;
     private static final String TAG = "AddNewDishActivity";
 
@@ -77,7 +77,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         image = findViewById(R.id.image);
         name = findViewById(R.id.name);
         spinnerMenu = findViewById(R.id.spinnerMenu);
-        spinnerClassification = findViewById(R.id.spinnerClassification);
+        spinnerVIP_Normal = findViewById(R.id.spinnerClassification);
         price_food_small = findViewById(R.id.price_food_small);
         price_food_medium = findViewById(R.id.price_food_medium);
         price_food_large = findViewById(R.id.price_food_large);
@@ -89,7 +89,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         FoodViewModel foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
         foodViewModel.MenuOperators();
         MenuViewModel menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
-        menuOption = Arrays.asList(getResources().getStringArray(R.array.menu_option));
+        menuOption_vip_normal = Arrays.asList(getResources().getStringArray(R.array.menu_option_vip_normal));
         menuViewModel.MenuItemAll().observe(this, menuItems -> {
             this.menuItems = menuItems;
             ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
@@ -109,18 +109,18 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
         });
         /* VIP Or Normal */
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption_vip_normal);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerClassification.setAdapter(adapter);
-        spinnerClassification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerVIP_Normal.setAdapter(adapter);
+        spinnerVIP_Normal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                menuOptionItemSelected = menuOption.get(i);
+                menuOptionItemSelectedVIP_Normal = menuOption_vip_normal.get(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                menuOptionItemSelected = menuOption.get(0);
+                menuOptionItemSelectedVIP_Normal = menuOption_vip_normal.get(0);
             }
         });
 
@@ -212,7 +212,11 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                     }
                 }
                 map.put("id", id);
-                map.put("classification", menuOptionItemSelected);
+                if (menuOptionItemSelectedVIP_Normal.equals("")) {
+                    map.put("classification", menuOption_vip_normal.get(0));
+                } else {
+                    map.put("classification", menuOptionItemSelectedVIP_Normal);
+                }
                 map.put("idMenu", menuItem.getId());
                 Repo.refe.child(FOOD).child(id).updateChildren(map).addOnCompleteListener(task1 -> {
                     image.setImageDrawable(getResources().getDrawable(R.drawable.add_photo));
@@ -330,11 +334,14 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
 
     @Override
     public void deleteFood(Food food) {
-        Repo.refe.child(FOOD).child(food.getId()).removeValue().addOnCompleteListener(task -> {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewDishActivity.this);
+        builder.setTitle(getResources().getString(R.string.deleted));
+        builder.setPositiveButton(getResources().getString(R.string.yes), (dialogInterface, i) -> Repo.refe.child(FOOD).child(food.getId()).removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful() && isNetworkConnected(AddNewDishActivity.this)) {
-                Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewDishActivity.this, getResources().getString(R.string.deleted), Toast.LENGTH_SHORT).show();
             }
-        });
+        })).setNegativeButton(getResources().getString(R.string.no), (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.show();
     }
 
     @Override
@@ -360,7 +367,7 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
         price_food_medium.setText(String.valueOf(food.getPriceMedium()));
         price_food_large.setText(String.valueOf(food.getPriceLarge()));
         spinnerMenu.setSelection(menuItems.indexOf(new MenuItem(food.getIdMenu())));
-        spinnerClassification.setSelection(menuOption.indexOf(food.getClassification()));
+        spinnerClassification.setSelection(menuOption_vip_normal.indexOf(food.getClassification()));
         Log.e(TAG, "UpdateFood: " + menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu()))).Menu());
         ArrayAdapter<MenuItem> adapter = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -376,25 +383,25 @@ public class AddNewDishActivity extends AppCompatActivity implements FoodOptions
                 menuItemSelected = menuItems.get(menuItems.indexOf(new MenuItem(food.getIdMenu())));
             }
         });
-        ArrayAdapter<String> adapterClassification = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption);
+        ArrayAdapter<String> adapterClassification = new ArrayAdapter<>(AddNewDishActivity.this, android.R.layout.simple_spinner_item, menuOption_vip_normal);
         adapterClassification.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClassification.setAdapter(adapterClassification);
         spinnerClassification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                menuOptionItemSelected = menuOption.get(i);
+                menuOptionItemSelectedVIP_Normal = menuOption_vip_normal.get(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                spinnerClassification.setSelection(menuOption.indexOf(food.getClassification()));
+                spinnerClassification.setSelection(menuOption_vip_normal.indexOf(food.getClassification()));
             }
         });
         Button edit = v.findViewById(R.id.edit);
         edit.setOnClickListener(view -> {
             if (isNetworkConnected(AddNewDishActivity.this)) {
                 if (!Objects.requireNonNull(name.getText()).toString().equals("") && !Objects.requireNonNull(price_food_small.getText()).toString().equals("") && menuItemSelected != null) {
-                    editDish(uri, name.getText().toString().trim(), price_food_small.getText().toString().trim(), price_food_medium.getText().toString().trim(), price_food_large.getText().toString().trim(), Objects.requireNonNull(details.getText()).toString().trim(), menuItemSelected, food.getId(), menuOptionItemSelected);
+                    editDish(uri, name.getText().toString().trim(), price_food_small.getText().toString().trim(), price_food_medium.getText().toString().trim(), price_food_large.getText().toString().trim(), Objects.requireNonNull(details.getText()).toString().trim(), menuItemSelected, food.getId(), menuOptionItemSelectedVIP_Normal);
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.choose_menu), Toast.LENGTH_SHORT).show();
                 }

@@ -273,8 +273,8 @@ public class AddNewMenuItemActivity extends AppCompatActivity implements MenuOpt
         v.setPadding(30, 5, 30, 5);
         image = v.findViewById(R.id.image);
         image_bg = v.findViewById(R.id.image_bg);
-        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage()).into(image);
-        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage_bg()).into(image_bg);
+        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage()).placeholder(R.drawable.img).into(image);
+        Glide.with(AddNewMenuItemActivity.this).load(menuItem.getImage_bg()).placeholder(R.drawable.img).into(image_bg);
         image.setOnClickListener(view -> {
             openImage();
         });

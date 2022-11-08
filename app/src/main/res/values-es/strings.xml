@@ -57,13 +57,15 @@
     <string name="medium_price">precio por medio (opcional)</string>
     <string name="large_price">gran precio (opcional)</string>
     <string name="no_money">Sin dinero</string>
+    <string name="icon">Icono</string>
+    <string name="background">Antecedentes</string>
     <string-array name="user_option">
         <item>Pesebre</item>
         <item>Mesero</item>
         <item>Deshabilitar</item>
     </string-array>
 
-    <string-array name="menu_option">
+    <string-array name="menu_option_vip_normal">
         <item>VIP</item>
         <item>Normal</item>
     </string-array>

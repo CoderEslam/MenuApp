@@ -47,7 +47,7 @@
         <item>Waiter</item>
         <item>Disable</item>
     </string-array>
-    <string-array name="menu_option">
+    <string-array name="menu_option_vip_normal">
         <item>Normal</item>
         <item>VIP</item>
     </string-array>
@@ -76,5 +76,7 @@
     <string name="medium_price">medium price optional</string>
     <string name="large_price">large price optional</string>
     <string name="no_money">no money</string>
+    <string name="icon">Icon</string>
+    <string name="background">Background</string>
 
 </resources>
